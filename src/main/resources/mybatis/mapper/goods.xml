@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqi.dao.GoodsDao">
+	<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！ -->
+	<resultMap id="Goods" type="com.maiqi.po.Goods">
+		<id column="goodsId" property="goodsId" />
+		<result column="label" property="label" />
+		<result column="goodsName" property="goodsName" />
+		<result column="orgPrice" property="orgPrice" />
+		<result column="goodsDesc" property="goodsDesc" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+		<result column="isValid" property="isValid" />
+	</resultMap>
+	<!-- 查询单条记录 -->
+	<select id="selectGoodsById" parameterType="java.lang.String" resultMap="Goods">
+		SELECT * FROM t_goods WHERE goodsId = #{goodsId} and isValid = 1
+	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectGoods" parameterType="Map" resultMap="Goods">
+		SELECT * FROM t_goods 
+		<where>
+			<if test="goodsName !=null and goodsName !=''">
+				and goodsName like '${goodsName}%'
+			</if>
+			<if test="labels !=null and labels !=''">
+				<foreach collection="labels" item="label" open="and ("  
+	                close=")" separator="and">  
+	                find_in_set(#{label},label) 
+	            </foreach>
+			</if>
+			<if test="goodsDesc !=null and goodsDesc !=''">
+				and goodsDesc like '%${goodsDesc}%'
+			</if>
+		</where>
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="createGoods" parameterType="com.maiqi.po.Goods" >
+
+		<selectKey keyProperty="goodsId" resultType="java.lang.String" order="BEFORE">
+			select UUID()
+		</selectKey>
+
+		INSERT INTO t_goods
+		(
+		goodsId,
+		goodsName,
+		label,
+		orgPrice,
+		goodsDesc,
+		isValid,
+		createTime,
+		updateTime,
+		createUserId,
+		updateUserId
+		)
+		VALUES
+		(
+		#{goodsId},
+		#{goodsName},
+		#{label},
+		#{orgPrice},
+		#{goodsDesc},
+		1,
+		CURRENT_TIMESTAMP(),
+		CURRENT_TIMESTAMP(),
+		#{createUserId},
+		#{createUserId}
+		)
+	</insert>
+	
+	<update id="saveGoods" parameterType="com.maiqi.po.Goods">  
+        update t_goods   
+	        <set>
+	        	<if test="goodsName !=null and goodsName !=''">
+	        		goodsName=#{goodsName},
+	        	</if>
+	        	<if test="label !=null and label !=''">
+	        		label=#{label},
+	        	</if>
+	        	<if test="orgPrice !=null and orgPrice !=''">
+	        		orgPrice=#{orgPrice},
+	        	</if>
+	        	<if test="goodsDesc !=null and goodsDesc !=''">
+	        		goodsDesc=#{goodsDesc},
+	        	</if>
+	        	<if test="isValid !=null and isValid !=''">
+	        		isValid=#{isValid},
+	        	</if>
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+        where goodsId=#{goodsId}  
+    </update> 
+</mapper> 

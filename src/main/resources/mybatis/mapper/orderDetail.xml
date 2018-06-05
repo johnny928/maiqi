@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqi.dao.OrderDetailDao">
+	<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！ -->
+	<resultMap id="OrderDetail" type="com.maiqi.po.OrderDetail">
+		<id column="orderDetailsId" property="orderDetailsId" />
+		<result column="orderId" property="orderId" />
+		<result column="goodsId" property="goodsId" />
+		<result column="goodsName" property="goodsName" />
+		<result column="orgPrice" property="orgPrice" />
+		<result column="price" property="price" />
+		<result column="discount" property="discount" />
+		<result column="totalPrice" property="totalPrice" />
+		<result column="quantity" property="quantity" />
+		<result column="isValid" property="isValid" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+	</resultMap>
+	<!-- 查询单条记录 -->
+	<select id="getOrderDetailsById" parameterType="java.lang.String" resultMap="OrderDetail">
+		SELECT * FROM t_OrderDetails WHERE orderDetailsId = #{orderDetailsId} and isValid = 1
+	</select>
+	
+	<select id="selectOrderDetailsByOrderId" parameterType="java.lang.String" resultMap="OrderDetail">
+		SELECT * FROM t_OrderDetails WHERE orderId = #{orderId} and isValid = 1
+	</select>
+	
+
+	<!-- 插入语句 -->
+	<insert id="createOrderDetail" parameterType="com.maiqi.po.OrderDetail" >
+
+		<selectKey keyProperty="orderDetailsId" resultType="java.lang.String" order="BEFORE">
+			select UUID()
+		</selectKey>
+
+		INSERT INTO t_OrderDetails
+		(
+			orderDetailsId,
+			orderId,
+			goodsId,
+			goodsName,
+			orgPrice,
+			price,
+			discount,
+			totalPrice,
+			quantity,
+			isValid,
+			createTime,
+			updateTime,
+			createUserId,
+			updateUserId
+		)
+		VALUES
+		(
+			#{orderDetailsId},
+			#{orderId},
+			#{goodsId},
+			#{goodsName},
+			#{orgPrice},
+			#{price},
+			#{discount},
+			#{totalPrice},
+			#{quantity},
+			1,
+			CURRENT_TIMESTAMP(),
+			CURRENT_TIMESTAMP(),
+			#{createUserId},
+			#{createUserId}
+		)
+	</insert>
+	
+	<update id="saveOrderDetail" parameterType="com.maiqi.po.OrderDetail">  
+        update t_OrderDetails  
+        	<set>
+	        	<if test="goodsId !=null and goodsId !=''">
+	        		goodsId=#{goodsId},
+	        	</if>
+	        	<if test="goodsName !=null and goodsName !=''">
+	        		goodsName=#{goodsName},
+	        	</if>
+	        	<if test="orgPrice !=null and orgPrice !=''">
+	        		orgPrice=#{orgPrice},
+	        	</if>
+				<if test="price !=null and price !=''">
+	        		price=#{price},
+	        	</if>
+				<if test="discount !=null and discount !=''">
+	        		discount=#{discount},
+	        	</if>
+				<if test="totalPrice !=null and totalPrice !=''">
+	        		totalPrice=#{totalPrice},
+	        	</if>
+				<if test="quantity !=null and quantity !=''">
+	        		quantity=#{quantity},
+	        	</if>
+	        	<if test="isValid !=null and isValid !=''">
+	        		isValid=#{isValid},
+	        	</if>
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+		where orderDetailsId=#{orderDetailsId}  
+    </update> 
+</mapper> 

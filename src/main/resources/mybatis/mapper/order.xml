@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqi.dao.OrderDao">
+	<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！ -->
+	<resultMap id="Order" type="com.maiqi.po.Order">
+		<id column="orderId" property="orderId" />
+		<result column="orderId" property="orderId" />
+		<result column="salespersonId" property="salespersonId" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+		<result column="orderTime" property="orderTime" />
+		<result column="createTime" property="createTime" />
+		<result column="totalPrice" property="totalPrice" />
+		<result column="isValid" property="isValid" />
+		<result column="updateTime" property="updateTime" />
+		<result column="orderNumber" property="orderNumber" />
+	</resultMap>
+	
+	<!--  分页后缀  -->
+	<sql id="pageSuffix">
+		<if test="rowStart!=null and rowStart!='' and pageSize!=null and pageSize!=''">
+			LIMIT ${rowStart},${pageSize}
+		</if>
+	</sql>
+	
+	<!--  用户查询条件  -->
+	<sql id="order_list_whereCls">
+		<where>
+			t.isValid = 1
+			<if test="orderTimeS !=null and orderTimeS !=''">
+				and t.orderTime &gt;= str_to_date(#{orderTimeS, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="orderTimeE !=null and orderTimeE !=''">
+				and t.orderTime &lt; str_to_date(#{orderTimeE, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="clientName !=null and clientName !=''">
+				and EXISTS (select 1 from t_client where t_client.clientId = t.clientId and t_client.clientName like '${clientName, jdbcType=VARCHAR}%')
+			</if>
+			<if test="salespersonName !=null and salespersonName !=''">
+				and EXISTS (select 1 from t_user where t_user.userId = t.salespersonId and t_user.userName like '${salespersonName, jdbcType=VARCHAR}%')
+			</if>
+			<if test="salespersonId !=null and salespersonId !=''">
+				and t.salespersonId = #{salespersonId, jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 查询单条记录 -->
+	<select id="selectOrderById" parameterType="java.lang.String" resultMap="Order">
+		SELECT * FROM t_Order WHERE orderId = #{orderId} and isValid = 1
+	</select>
+	
+	<select id="selectOrderByNumber" parameterType="java.lang.String" resultMap="Order">
+		SELECT * FROM t_Order WHERE orderNumber = #{orderNumber} and isValid = 1
+	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectOrders" parameterType="Map" resultMap="Order">
+		SELECT * FROM t_Order t
+			<include refid="order_list_whereCls"/>
+			order by orderNumber desc
+			<include refid="pageSuffix"/>
+	</select>
+	
+	<select id="selectOrders4V" parameterType="Map" resultType="java.util.Map">
+		SELECT t.orderId,
+			t.orderNumber, 
+			(select client.clientName from t_client client where client.clientId = t.clientId ) clientName,
+			t.totalPrice,
+			(select count(1) from t_orderdetails detail where detail.orderId = t.orderId) goodsCnt,
+			(select t_user.userName from t_user where t_user.userId = t.salespersonId) salesperson  
+		FROM t_Order t
+			<include refid="order_list_whereCls"/>
+			order by orderNumber desc
+			<include refid="pageSuffix"/>
+	</select>
+	
+	<select id="selectOrdersCnt" parameterType="Map" resultType="int">
+		SELECT count(1) cnt FROM t_Order t
+			<include refid="order_list_whereCls"/>
+	</select>
+	
+	<select id="getOrderNumber" resultType="java.lang.String">
+		<!-- select CONCAT(date_format(NOW(),'%Y%m%d'),'-',right(ROUND(RAND(),6),6)) -->
+		select CONCAT(date_format(NOW(), '%y%m%d'),floor(date_format(NOW(3), '%H%i%s%f')/1000))
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="createOrder" parameterType="com.maiqi.po.Order" >
+
+		<selectKey keyProperty="orderId" resultType="java.lang.String" order="BEFORE">
+			select UUID()
+		</selectKey>
+
+		INSERT INTO t_Order
+		(
+			orderId,
+			clientId,
+			salespersonId,
+			orderTime,
+			totalPrice,
+			orderNumber,
+			isValid,
+			createTime,
+			updateTime,
+			createUserId,
+			updateUserId
+		)
+		VALUES
+		(
+			#{orderId},
+			#{clientId},
+			#{salespersonId},
+			CURRENT_TIMESTAMP(),
+			#{totalPrice},
+			#{orderNumber},
+			1,
+			CURRENT_TIMESTAMP(),
+			CURRENT_TIMESTAMP(),
+			#{createUserId},
+			#{createUserId}
+		)
+	</insert>
+	
+	
+	
+	<update id="saveOrder" parameterType="com.maiqi.po.Order">  
+        update t_Order  
+        	<set>
+	        	<if test="clientId !=null and clientId !=''">
+	        		clientId=#{clientId},
+	        	</if>
+	        	<if test="salespersonId !=null and salespersonId !=''">
+	        		salespersonId=#{salespersonId},
+	        	</if>
+	        	<if test="orderTime !=null and orderTime !=''">
+	        		orderTime=#{orderTime},
+	        	</if>
+	        	<if test="totalPrice !=null and totalPrice !=''">
+	        		totalPrice=#{totalPrice},
+	        	</if>
+	        	<if test="isValid !=null and isValid !=''">
+	        		isValid=#{isValid},
+	        	</if>
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+		where orderId=#{orderId}  
+    </update> 
+</mapper> 

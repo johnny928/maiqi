@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqi.dao.ClientDao">
+	<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！ -->
+	<resultMap id="Client" type="com.maiqi.po.Client">
+		<id column="clientId" property="clientId" />
+		<result column="clientName" property="clientName" />
+		<result column="phoneNum" property="phoneNum" />
+		<result column="sex" property="sex" />
+		<result column="birthday" property="birthday" />
+		<result column="level" property="level" />
+		<result column="label" property="label" />
+		<result column="isValid" property="isValid" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+	</resultMap>
+	<!-- 查询单条记录 -->
+	<select id="selectClientById" parameterType="java.lang.String" resultMap="Client">
+		SELECT * FROM t_client WHERE clientId = #{clientId} and isValid = 1
+	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectClients" parameterType="Map" resultMap="Client">
+		SELECT * FROM t_client where isValid = 1
+		<if test="clientName !=null and clientName !=''">
+			and clientName like '${clientName}%'
+		</if>
+		<if test="labels !=null and labels !=''">
+			<foreach collection="labels" item="label" open="and ("  
+                close=")" separator="and">  
+                find_in_set(#{label, jdbcType=VARCHAR},label) 
+            </foreach>
+		</if>
+		<if test="phoneNum !=null and phoneNum !=''">
+			and phoneNum = #{phoneNum, jdbcType=VARCHAR}
+		</if>
+		<if test="sex !=null and sex !=''">
+			and sex = #{sex, jdbcType=VARCHAR}
+		</if>
+		<if test="level !=null and level !=''">
+			and level = #{level, jdbcType=INTEGER}
+		</if>
+		<if test="birthday !=null and birthday !=''">
+			and birthday = #{birthday, jdbcType=DATE}
+		</if>
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="createClient" parameterType="com.maiqi.po.Client" >
+
+		<selectKey keyProperty="clientId" resultType="java.lang.String" order="BEFORE">
+			select UUID()
+		</selectKey>
+
+		INSERT INTO t_client
+		(
+			clientId,
+			clientName,
+			phoneNum,
+			sex,
+			birthday,
+			level,
+			label,
+			isValid,
+			createTime,
+			updateTime,
+			createUserId,
+			updateUserId
+		)
+		VALUES
+		(
+			#{clientId},
+			#{clientName},
+			#{phoneNum},
+			#{sex},
+			#{birthday},
+			#{level},
+			#{label},
+			1,
+			CURRENT_TIMESTAMP(),
+			CURRENT_TIMESTAMP(),
+			#{createUserId},
+			#{createUserId}
+		)
+	</insert>
+	
+	<update id="saveClient" parameterType="com.maiqi.po.Client">  
+        update t_client   
+        	<set>
+	        	<if test="clientName !=null and clientName !=''">
+	        		clientName=#{clientName},
+	        	</if>
+	        	<if test="phoneNum !=null and phoneNum !=''">
+	        		phoneNum=#{phoneNum},
+	        	</if>
+	        	<if test="sex !=null and sex !=''">
+	        		sex=#{sex},
+	        	</if>
+	        	<if test="birthday !=null and birthday !=''">
+	        		birthday=#{birthday},
+	        	</if>
+	        	<if test="level !=null and level !=''">
+	        		level=#{level},
+	        	</if>
+	        	<if test="label !=null and label !=''">
+	        		label=#{label},
+	        	</if>
+	        	<if test="isValid !=null and isValid !=''">
+	        		isValid=#{isValid},
+	        	</if>
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+		where clientId=#{clientId}  
+    </update> 
+</mapper> 
