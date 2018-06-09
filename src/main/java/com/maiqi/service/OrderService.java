@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maiqi.dao.ClientDao;
+import com.maiqi.dao.GoodsDao;
 import com.maiqi.dao.OrderDao;
 import com.maiqi.dao.OrderDetailDao;
 import com.maiqi.po.Client;
@@ -29,8 +30,10 @@ public class OrderService {
 	@Autowired
 	private OrderDetailDao orderDetailDao;
 	
+	@Autowired
+	private GoodsDao goodsDao;
+	
 	public List<Map<String,Object>> getOrdersList(Map params){
-		
 		return orderDao.selectOrders4V(params);
 	}
 	
@@ -58,5 +61,21 @@ public class OrderService {
 		resM.put("client", client);
 		resM.put("order", order);
 		return resM;
+	}
+	
+	public List<Map<String,Object>> getGoodsList(Map params){
+		return goodsDao.selectGoods4V(params);
+	}
+	
+	public int getGoodsListCnt(Map params){
+		return goodsDao.selectGoods4VCnt(params);
+	}
+	
+	public List<Map<String,Object>> getDetailsEditList(Map params){
+		return orderDetailDao.selectOrderDetails4V(params);
+	}
+	
+	public int getDetailsEditListCnt(Map params){
+		return orderDetailDao.selectOrderDetails4VCnt(params);
 	}
 }

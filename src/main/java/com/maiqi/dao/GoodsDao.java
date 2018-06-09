@@ -13,4 +13,8 @@ public interface GoodsDao {
 	public int createGoods(Goods goods);
 	
 	public int saveGoods(Goods goods);
+	
+	public List<Map<String,Object>> selectGoods4V(Map<String,Object> params);
+	
+	public int selectGoods4VCnt(Map<String,Object> params);
 }

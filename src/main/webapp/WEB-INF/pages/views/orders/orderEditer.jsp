@@ -25,16 +25,8 @@
 					<i class="fa fa-shopping-cart"></i>订单号：{{orderNumber}}
 				</div>
 				<div class="actions">
-					<a href="#" class="btn btn-success" ng-click="saveOrder()">
-					<i class="fa fa-check"></i>
-					<span class="hidden-480">
-					完成 </span>
-					</a>
-					<a href="#/orders" class="btn btn-default">
-					<i class="fa fa-times"></i>
-					<span class="hidden-480">
-					取消 </span>
-					</a>
+					<a href="#" class="btn btn-success" ng-click="saveOrder()"><i class="fa fa-check"></i><span class="hidden-480">完成 </span></a>
+					<a href="#/orders" class="btn btn-default">	<i class="fa fa-times"></i><span class="hidden-480">返回 </span></a>
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -159,6 +151,13 @@
 												</p>
 											</div>
 										</div>
+										<!-- <div class="form-actions">
+											<div class="row">
+												<div class="col-md-offset-3 col-md-3">
+													<button type="button" class="btn purple btn-block"><i class="fa fa-check"></i> 保存</button>
+												</div>
+											</div>
+										</div> -->
 									</form>
 								</div>
 							</div>
@@ -167,125 +166,60 @@
 									<div class="col-md-12">
 										<form action="#">
 											<div class="input-group">
-												<span class="input-group-btn">
-													<input type="checkbox" class="make-switch" data-on-text="商品名" data-off-text="标签名">
+												<!-- <span class="input-group-addon">
+											        <label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'商品名'" ng-true-value="'商品名'"
+			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='商品名'?'商品名':'&nbsp;&nbsp;'}}</label>
+			    									<label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'标签名'" ng-true-value="'商品名'"
+			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='标签名'?'标签名':'&nbsp;&nbsp;'}}</label>
+											    </span> -->
+											    <span class="input-group-btn">
+											    <label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'商品名'" ng-true-value="'商品名'"
+			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='商品名'?'商品名':'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}}</label>
+			    									<label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'标签名'" ng-true-value="'商品名'"
+			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='标签名'?'标签名':'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}}</label>
+													<!-- <input type="checkbox" class="make-switch" data-on-text="商品名" data-off-text="标签名" ng-model="goodsListQueryCond.searchFlag"> -->
 												</span>
 												<div class="input-cont">
-													<input type="text" placeholder="Search..." class="form-control" ng-model="orderInfo.client.label"/>
+													<input type="text" placeholder="Search..." class="form-control" ng-model="goodsListQueryCond.searchText"/>
 												</div>
 												<span class="input-group-btn">
-												<button type="button" class="btn green-haze">
-												Search &nbsp; <i class="m-icon-swapright m-icon-white"></i>
-												</button>
+													<button type="button" class="btn green-haze" id="goods-search">
+													搜索 &nbsp; <i class="m-icon-swapright m-icon-white"></i>
+													</button>
 												</span>
 											</div>
 										</form>
 									</div>
 								</div>
 								<div class="table-responsive">
-									<table class="table table-striped table-bordered table-advance table-hover">
-									<thead>
-									<tr>
-										<th class="text-nowrap">
-											<i class="fa fa-briefcase"></i> 商品名称
-										</th>
-										<th class="text-nowrap">
-											<i class="fa fa-th-list"></i> 分类
-										</th>
-										<th class="text-nowrap">
-											<i class="fa fa-cny"></i> 单价
-										</th>
-										<th class="text-nowrap">
-											<i class="fa fa-comment"></i> 描述
-										</th>
-										<th class="text-nowrap">
-											<i class="fa fa-file"></i> 数量
-										</th>
-										<th class="text-nowrap">
-											<i class="fa fa-check"></i> 打折
-										</th>
-										<th class="text-nowrap">
-											<i class="fa fa-cny"></i> 折后总额
-										</th>
-										<th>
-										</th>
-									</tr>
-									</thead>
-									<tbody>
-									<tr>
-										<td>
-											<a href="javascript:;">
-											Pixel Ltd </a>
-										</td>
-										<td>
-											 Server hardware purchase
-										</td>
-										<td>
-											 52560.10￥ 
-										</td>
-										<td>
-											大小: 中容纳电脑尺寸: 15英寸是否有背部缓冲棉: 是适用对象: 中年防水程度: 防泼水性别: 男质地: 涤纶提拎部件类型: 硬把闭合方式: 拉链搭扣内部结构: 拉链暗袋 手机袋 证件袋 夹层拉链袋 电脑插袋 相机插袋箱包外袋种类: 内贴袋流行元素: 机车图案: 纯色颜色分类: 15.6寸(送七+水壶+火机) 17寸(送七+水壶+火机) 15.6寸（裸包不带赠品） 17寸（裸包不带赠品） 15.6（送七+雨罩+火机） 17寸（送七+雨罩+火机） 15.6寸（促销送腰包推荐） 17寸（促销送腰包推荐） 15.6寸（送七+水壶+雨罩） 17寸（送七加水壶+雨罩）有无夹层: 有箱包硬度: 软是否可折叠: 否成色: 全新适用场景: 旅行品牌: 瑞士军刀货号: BDD812风格: 学院形状: 竖款方形肩带样式: 双根里料材质: 锦纶箱包尺寸: 48*33*23
-										</td>
-										<td>
-											<div class="input-inline input-medium ">
-												<input type="text" value="5" name="demo1" class="form-control maiqi-spin-quantity" maxlength="6">
-											</div>
-										</td>
-										<td>
-											<div class="input-inline input-medium ">
-												<input type="text" value="10" name="demo1" class="form-control maiqi-spin-discount" maxlength="3">
-											</div>
-										</td>
-										<td>
-											52560.10￥
-										</td>
-										<td>
-											<a class="btn default btn-xs red-soft" href="javascript:;">
-											添加 </a>
-											<p></p>
-											<a class="btn default btn-xs green-stripe" href="javascript:;">
-											取消 </a>
-										</td>
-									</tr>
-									</tbody>
+									<table class="table table-striped table-bordered table-advance table-hover" id="goods-list">
+										<thead>
+											<tr>
+												<th class="text-nowrap">
+													<i class="fa fa-briefcase"></i> 商品名称
+												</th>
+												<th class="text-nowrap">
+													<i class="fa fa-th-list"></i> 分类
+												</th>
+												<th class="text-nowrap">
+													<i class="fa fa-cny"></i> 单价
+												</th>
+												<th class="text-nowrap">
+													<i class="fa fa-comment"></i> 描述
+												</th>
+												<th class="text-nowrap">
+													<i class="fa fa-file"></i> 数量
+												</th>
+												<th>
+												</th>
+											</tr>
+										</thead>
 									</table>
-								</div>
-								<div class="margin-top-20">
-									<ul class="pagination">
-										<li>
-											<a href="javascript:;">
-											Prev </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											1 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											2 </a>
-										</li>
-										<li class="active">
-											<a href="javascript:;">
-											3 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											4 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											5 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											Next </a>
-										</li>
-									</ul>
 								</div>
 							</div>
 							<div class="tab-pane fade" id="tab_3" >
 								<div class="table-responsive">
-									<table class="table table-striped table-bordered table-advance table-hover">
+									<table class="table table-striped table-bordered table-advance table-hover" id="details-edit">
 									<thead>
 									<tr>
 										<th class="text-nowrap">
@@ -313,73 +247,7 @@
 										</th>
 									</tr>
 									</thead>
-									<tbody>
-									<tr>
-										<td>
-											<a href="javascript:;">
-											Pixel Ltd </a>
-										</td>
-										<td>
-											 Server hardware purchase
-										</td>
-										<td>
-											 52560.10￥ 
-										</td>
-										<td>
-											大小: 中容纳电脑尺寸: 15英寸是否有背部缓冲棉: 是适用对象: 中年防水程度: 防泼水性别: 男质地: 涤纶提拎部件类型: 硬把闭合方式: 拉链搭扣内部结构: 拉链暗袋 手机袋 证件袋 夹层拉链袋 电脑插袋 相机插袋箱包外袋种类: 内贴袋流行元素: 机车图案: 纯色颜色分类: 15.6寸(送七+水壶+火机) 17寸(送七+水壶+火机) 15.6寸（裸包不带赠品） 17寸（裸包不带赠品） 15.6（送七+雨罩+火机） 17寸（送七+雨罩+火机） 15.6寸（促销送腰包推荐） 17寸（促销送腰包推荐） 15.6寸（送七+水壶+雨罩） 17寸（送七加水壶+雨罩）有无夹层: 有箱包硬度: 软是否可折叠: 否成色: 全新适用场景: 旅行品牌: 瑞士军刀货号: BDD812风格: 学院形状: 竖款方形肩带样式: 双根里料材质: 锦纶箱包尺寸: 48*33*23
-										</td>
-										<td>
-											<div class="input-inline input-medium ">
-												<input type="text" value="5" name="demo1" class="form-control maiqi-spin-quantity" maxlength="6">
-											</div>
-										</td>
-										<td>
-											<div class="input-inline input-medium ">
-												<input type="text" value="10" name="demo1" class="form-control maiqi-spin-discount" maxlength="3">
-											</div>
-										</td>
-										<td>
-											52560.10￥
-										</td>
-										<td>
-											<a class="btn default btn-xs green-stripe" href="javascript:;">
-											取消 </a>
-										</td>
-									</tr>
-									</tbody>
 									</table>
-								</div>
-								<div class="margin-top-20">
-									<ul class="pagination">
-										<li>
-											<a href="javascript:;">
-											Prev </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											1 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											2 </a>
-										</li>
-										<li class="active">
-											<a href="javascript:;">
-											3 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											4 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											5 </a>
-										</li>
-										<li>
-											<a href="javascript:;">
-											Next </a>
-										</li>
-									</ul>
 								</div>
 							</div>
 							<div class="tab-pane fade" id="tab_4" >

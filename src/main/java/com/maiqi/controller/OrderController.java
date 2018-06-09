@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.maiqi.component.DataTableResult;
 import com.maiqi.component.JsonResult;
 import com.maiqi.component.SessionManager;
+import com.maiqi.dao.GoodsDao;
 import com.maiqi.service.OrderService;
 
 @Controller
@@ -135,6 +136,84 @@ public class OrderController {
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
 		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/getGoodsList"})
+	@ResponseBody
+	public DataTableResult getGoodsList(@RequestParam(value="goodsListQueryCond",required=true) String queryCond,
+			@RequestParam(value="start",required=false,defaultValue="0")  String start,
+			@RequestParam(value="length",required=false,defaultValue="10") String length,
+			@RequestParam(value="draw",required=false,defaultValue="0") String draw,
+			Model model){
+		
+		logger.info(String.format("queryCond=%s", queryCond));
+		DataTableResult jresult = new DataTableResult();
+		if(queryCond==null || queryCond.isEmpty()){
+			jresult.setData(new ArrayList());
+			jresult.setDraw(Integer.parseInt(draw));
+			jresult.setRecordsFiltered(0);
+			jresult.setRecordsTotal(0);
+			return jresult;
+		}
+		try{
+			Map data = new HashMap();
+			Gson gson = new Gson();
+			Map m = gson.fromJson(queryCond, Map.class);
+			logger.debug(String.format("\n\nqueryCond=%s\nrowStart=%s\npageSize=%s\n\n", queryCond,start,length));
+			m.put("rowStart", start);
+			m.put("pageSize", length);
+			logger.debug(String.format("\n\nlabels=%s\n", m.get("labels")));
+			int cnt =orderService.getGoodsListCnt(m);
+			jresult.setData(orderService.getGoodsList(m));
+			jresult.setDraw(Integer.parseInt(draw));
+			jresult.setRecordsFiltered(cnt);
+			jresult.setRecordsTotal(cnt);
+		}catch(Exception e){
+			jresult.setData(new ArrayList());
+			jresult.setDraw(Integer.parseInt(draw));
+			jresult.setRecordsFiltered(0);
+			jresult.setRecordsTotal(0);
+		}
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/getDetailsEditList"})
+	@ResponseBody
+	public DataTableResult getDetailsEditList(@RequestParam(value="detailsEditQueryCond",required=true) String queryCond,
+			@RequestParam(value="start",required=false,defaultValue="0")  String start,
+			@RequestParam(value="length",required=false,defaultValue="10") String length,
+			@RequestParam(value="draw",required=false,defaultValue="0") String draw,
+			Model model){
+		
+		logger.info(String.format("queryCond=%s", queryCond));
+		DataTableResult jresult = new DataTableResult();
+		if(queryCond==null || queryCond.isEmpty()){
+			jresult.setData(new ArrayList());
+			jresult.setDraw(Integer.parseInt(draw));
+			jresult.setRecordsFiltered(0);
+			jresult.setRecordsTotal(0);
+			return jresult;
+		}
+		try{
+			Map data = new HashMap();
+			Gson gson = new Gson();
+			Map m = gson.fromJson(queryCond, Map.class);
+			logger.debug(String.format("\n\nqueryCond=%s\nrowStart=%s\npageSize=%s\n\n", queryCond,start,length));
+			m.put("rowStart", start);
+			m.put("pageSize", length);
+			logger.debug(String.format("\n\nlabels=%s\n", m.get("labels")));
+			int cnt =orderService.getDetailsEditListCnt(m);
+			jresult.setData(orderService.getDetailsEditList(m));
+			jresult.setDraw(Integer.parseInt(draw));
+			jresult.setRecordsFiltered(cnt);
+			jresult.setRecordsTotal(cnt);
+		}catch(Exception e){
+			jresult.setData(new ArrayList());
+			jresult.setDraw(Integer.parseInt(draw));
+			jresult.setRecordsFiltered(0);
+			jresult.setRecordsTotal(0);
+		}
 		return jresult;
 	}
 }

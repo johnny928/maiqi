@@ -15,15 +15,18 @@
 		<result column="updateUserId" property="updateUserId" />
 		<result column="isValid" property="isValid" />
 	</resultMap>
-	<!-- 查询单条记录 -->
-	<select id="selectGoodsById" parameterType="java.lang.String" resultMap="Goods">
-		SELECT * FROM t_goods WHERE goodsId = #{goodsId} and isValid = 1
-	</select>
 	
-	<!-- 查询多条记录 -->
-	<select id="selectGoods" parameterType="Map" resultMap="Goods">
-		SELECT * FROM t_goods 
+	<!--  分页后缀  -->
+	<sql id="pageSuffix">
+		<if test="rowStart!=null and rowStart!='' and pageSize!=null and pageSize!=''">
+			LIMIT ${rowStart},${pageSize}
+		</if>
+	</sql>
+	
+		<!--  用户查询条件  -->
+	<sql id="goods_list_whereCls">
 		<where>
+			t.isValid = 1
 			<if test="goodsName !=null and goodsName !=''">
 				and goodsName like '${goodsName}%'
 			</if>
@@ -37,6 +40,34 @@
 				and goodsDesc like '%${goodsDesc}%'
 			</if>
 		</where>
+	</sql>
+	
+	
+	<!-- 查询单条记录 -->
+	<select id="selectGoodsById" parameterType="java.lang.String" resultMap="Goods">
+		SELECT * FROM t_goods WHERE goodsId = #{goodsId} and isValid = 1
+	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectGoods" parameterType="Map" resultMap="Goods">
+		SELECT * FROM t_goods 
+		<include refid="goods_list_whereCls"/>
+	</select>
+	
+	<!-- 获取商品列表 -->
+	<select id="selectGoods4V" parameterType="Map" resultType="java.util.Map">
+		SELECT goodsId,goodsName,label,orgPrice,goodsDesc,
+			(select sum(quantity) from t_orderdetails where orderId=#{orderId} and goodsId=t.goodsId and isValid=1) quantity,
+			(select count(1) from t_orderdetails where orderId=#{orderId} and goodsId=t.goodsId and isValid=1) cnt from t_goods t 
+		<include refid="goods_list_whereCls"/>
+		order by quantity desc,goodsName desc
+		<include refid="pageSuffix"/>
+	</select>
+	
+	<!-- 获取商品列表总数 -->
+	<select id="selectGoods4VCnt" parameterType="Map" resultType="int">
+		SELECT count(1) cnt from t_goods t 
+		<include refid="goods_list_whereCls"/>
 	</select>
 
 	<!-- 插入语句 -->

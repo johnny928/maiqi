@@ -20,5 +20,5 @@ public interface OrderDao {
 	
 	public int selectOrdersCnt(Map<String,Object> params);
 	
-	List<Map<String,Object>> selectOrders4V(Map<String,Object> params);
+	public List<Map<String,Object>> selectOrders4V(Map<String,Object> params);
 }

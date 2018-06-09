@@ -13,12 +13,22 @@
 		<result column="discount" property="discount" />
 		<result column="totalPrice" property="totalPrice" />
 		<result column="quantity" property="quantity" />
+		<result column="label" property="label" />
+		<result column="goodsDesc" property="goodsDesc" />
 		<result column="isValid" property="isValid" />
 		<result column="createTime" property="createTime" />
 		<result column="updateTime" property="updateTime" />
 		<result column="createUserId" property="createUserId" />
 		<result column="updateUserId" property="updateUserId" />
 	</resultMap>
+	
+	<!--  分页后缀  -->
+	<sql id="pageSuffix">
+		<if test="rowStart!=null and rowStart!='' and pageSize!=null and pageSize!=''">
+			LIMIT ${rowStart},${pageSize}
+		</if>
+	</sql>
+	
 	<!-- 查询单条记录 -->
 	<select id="getOrderDetailsById" parameterType="java.lang.String" resultMap="OrderDetail">
 		SELECT * FROM t_OrderDetails WHERE orderDetailsId = #{orderDetailsId} and isValid = 1
@@ -26,6 +36,21 @@
 	
 	<select id="selectOrderDetailsByOrderId" parameterType="java.lang.String" resultMap="OrderDetail">
 		SELECT * FROM t_OrderDetails WHERE orderId = #{orderId} and isValid = 1
+	</select>
+	
+	<!-- 获取商品列表 -->
+	<select id="selectOrderDetails4V" parameterType="Map" resultType="java.util.Map">
+		SELECT goodsId,goodsName,label,orgPrice,goodsDesc,
+			quantity, discount, totalPrice 
+			from t_orderdetails t 
+		where orderId = #{orderId} and isValid = 1
+		order by updateTime desc,quantity desc,goodsName desc
+		<include refid="pageSuffix"/>
+	</select>
+	
+	<!-- 获取商品列表总数 -->
+	<select id="selectOrderDetails4VCnt" parameterType="Map" resultType="int">
+		SELECT count(1) cnt from t_orderdetails t where orderId = #{orderId} and isValid = 1
 	</select>
 	
 

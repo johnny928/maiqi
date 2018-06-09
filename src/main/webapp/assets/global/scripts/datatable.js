@@ -54,6 +54,7 @@ var Datatable = function() {
                         "infoEmpty": "",
                         "emptyTable": "没有数据",
                         "zeroRecords": "没有查到匹配的数据",
+                        "processing": "加载数据中，请稍等...",
                         "paginate": {
                             "previous": "上一页",
                             "next": "下一页",
@@ -75,7 +76,7 @@ var Datatable = function() {
 
                     "pagingType": "bootstrap_extended", // pagination type(bootstrap, bootstrap_full_number or bootstrap_extended)
                     "autoWidth": false, // disable fixed width and enable fluid table
-                    "processing": false, // enable/disable display message box on record load
+                    "processing": true, // enable/disable display message box on record load
                     "serverSide": true, // enable/disable server side ajax loading
 
                     "ajax": { // define ajax settings

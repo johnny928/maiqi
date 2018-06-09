@@ -12,6 +12,8 @@ public class OrderDetail {
 	private BigDecimal price;
 	private BigDecimal discount;
 	private BigDecimal totalPrice;
+	private String goodsDesc;
+	private String label;
 	private int quantity;
 	private int isValid;
 	private Timestamp createTime;
@@ -102,5 +104,17 @@ public class OrderDetail {
 	}
 	public void setUpdateUserId(String updateUserId) {
 		this.updateUserId = updateUserId;
+	}
+	public String getGoodsDesc() {
+		return goodsDesc;
+	}
+	public void setGoodsDesc(String goodsDesc) {
+		this.goodsDesc = goodsDesc;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
 	}
 }
