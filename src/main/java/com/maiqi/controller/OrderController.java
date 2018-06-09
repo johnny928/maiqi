@@ -18,8 +18,8 @@ import com.google.gson.Gson;
 import com.maiqi.component.DataTableResult;
 import com.maiqi.component.JsonResult;
 import com.maiqi.component.SessionManager;
-import com.maiqi.dao.GoodsDao;
 import com.maiqi.service.OrderService;
+import com.maiqi.service.UserService;
 
 @Controller
 @RequestMapping(value={"/views/orders"})
@@ -32,6 +32,9 @@ public class OrderController {
 	
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value={"/orders"})
 	public String ordersPage(Model model){
@@ -216,4 +219,5 @@ public class OrderController {
 		}
 		return jresult;
 	}
+	
 }

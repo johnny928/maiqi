@@ -260,11 +260,14 @@
 													<span class="input-group-addon">
 													<i class="fa fa-female"></i>
 													</span>
-													<select class="form-control input-xlarge select2me" data-placeholder="Select...">
-														<option value=""></option>
-														<option value="AL">Alabama</option>
-														<option value="WY" selected>Wyoming</option>
-													</select>
+													<ui-select ng-model="salesperson.selected" theme="bootstrap">
+											            <ui-select-match placeholder="请选择售货员..." >{{$select.selected.userName}}</ui-select-match>
+											            <ui-select-choices repeat="person in operators | filter: $select.search">
+											              <div ng-bind-html="person.userName | highlight: $select.search"></div>
+											              <small ng-bind-html="'登录名：'+person.loginName | highlight: $select.search"></small>
+											            </ui-select-choices>
+											        </ui-select>
+													
 												</div>
 											</div>
 										</div>
@@ -280,6 +283,6 @@
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
 <script>
-	ComponentsOrderEditer.init(); // init todo page
+	//ComponentsOrderEditer.init(); // init todo page
 </script>
 <!-- END MAIN JS -->

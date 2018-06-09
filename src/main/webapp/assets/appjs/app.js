@@ -181,7 +181,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	//      controller: "GeneralPageController",
 	        resolve: {
 	            deps: ['$ocLazyLoad', function($ocLazyLoad) {
-	                return $ocLazyLoad.load({
+	                return $ocLazyLoad.load([{
+                        name: 'ui.select',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+                            'assets/global/plugins/angularjs/plugins/ui-select/select.min.css',
+                            'assets/global/plugins/angularjs/plugins/ui-select/select.min.js'
+                        ] 
+                    },{
 	                    name: 'MetronicApp',
 	                    insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 	                    files: [
@@ -201,10 +208,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/scripts/datatable.js',
 	                        'assets/appjs/scripts/table-ajax.js',
 	                        'assets/global/scripts/maiqi/maiqi.js',
-	                        'assets/admin/pages/scripts/orderEditer.js',
+//	                        'assets/admin/pages/scripts/orderEditer.js',
 	                        'assets/appjs/controllers/OrderEditController.js'
 	                    ]
-	                });
+	                }]);
 	            }]
 	        }
 	    })

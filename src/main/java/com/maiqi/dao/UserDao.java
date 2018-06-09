@@ -1,5 +1,8 @@
 package com.maiqi.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.maiqi.po.User;
@@ -13,4 +16,6 @@ public interface UserDao {
 			@Param("password") String password);
 	
 	public int saveUser(User user);
+	
+	public List<Map<String,Object>> selectOperators();
 }

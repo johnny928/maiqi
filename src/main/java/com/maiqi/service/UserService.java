@@ -1,5 +1,8 @@
 package com.maiqi.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +55,10 @@ public class UserService {
 		}else{
 			return 0;
 		}
+	}
+	
+	public List<Map<String,Object>> getAllOperators(){
+		return userDao.selectOperators();
 	}
 	
 }

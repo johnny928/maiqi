@@ -7,6 +7,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		}
 		
 		let orderId = $stateParams.orderId;
+		$scope.salesperson = {};
 		
 		let initSelect2 = function(_client){
 			if(_client && _client.level){
@@ -233,7 +234,37 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		};
 		
 		let onShowTab4 = function(){
-			
+			Metronic.blockUI({
+                target: "#tab_4",
+                animate: true,
+                overlayColor: 'none'
+            });
+			$http.post(
+	            'getOperators'
+	        ).then(function(response) {
+	        	let res = response.data;
+	        	if(res.isSuccess){
+	        		$scope.operators = res.data.allOperators;
+	        		if($scope.operators && $scope.orderInfo && $scope.orderInfo.order && $scope.orderInfo.order.salespersonId){
+	        			let sel = $scope.operators.filter(function(node,index){
+	        				return node.userId == $scope.orderInfo.order.salespersonId;
+	        			});
+	        			if(sel && sel.length>0){
+	        				$scope.salesperson.selected = sel[0];
+	        			}
+	        		}
+	        	}
+	        	Metronic.unblockUI("#tab_4");
+	        },function(){
+	        	Metronic.unblockUI("#tab_4");
+	        	Metronic.alert({
+                    type: 'danger',
+                    icon: 'warning',
+                    message: '获取订单数据失败',
+                    container: '#orderEditPanel',
+                    place: 'prepend'
+                });
+	        });
 		};
 		
 		let loadTab1 = function(){
@@ -310,7 +341,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		};
 		
 		let loadTab4 = function(){
-			
+
 		};
 		
 		$scope.addGoods = function(){
@@ -333,7 +364,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		
 		$scope.saveOrder = function(){
 			getClientData();
-			$log.log($scope.orderInfo);
+			$log.log($scope.orderInfo, $scope.salesperson.selected);
 		};
 		
 		$scope.open = function($event) {

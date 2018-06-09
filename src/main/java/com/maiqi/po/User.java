@@ -7,6 +7,7 @@ public class User {
 	private String userName;
 	private String loginName;
 	private String password;
+	private int isAdmin;
 	private Date createTime;
 	private Date updateTime;
 	private String createUserId;
@@ -66,5 +67,11 @@ public class User {
 	}
 	public void setUserDesc(String userDesc) {
 		this.userDesc = userDesc;
+	}
+	public int getIsAdmin() {
+		return isAdmin;
+	}
+	public void setIsAdmin(int isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 }
