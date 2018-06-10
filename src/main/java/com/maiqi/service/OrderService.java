@@ -78,4 +78,8 @@ public class OrderService {
 	public int getDetailsEditListCnt(Map params){
 		return orderDetailDao.selectOrderDetails4VCnt(params);
 	}
+	
+	public void saveOrderInfo(){
+		
+	}
 }

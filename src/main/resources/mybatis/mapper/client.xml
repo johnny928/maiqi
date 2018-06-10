@@ -47,6 +47,11 @@
 			and birthday = #{birthday, jdbcType=DATE}
 		</if>
 	</select>
+	
+	<!-- 根据手机号获取客户 -->
+	<select id="selectClientByPhoneNum" parameterType="java.lang.String" resultMap="Client">
+		SELECT * FROM t_client WHERE phoneNum = #{phoneNum} and isValid = 1
+	</select>
 
 	<!-- 插入语句 -->
 	<insert id="createClient" parameterType="com.maiqi.po.Client" >

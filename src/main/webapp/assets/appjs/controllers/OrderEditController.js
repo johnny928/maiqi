@@ -8,6 +8,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		
 		let orderId = $stateParams.orderId;
 		$scope.salesperson = {};
+		$scope.orderInfo = {client:{},order:{}};
 		
 		let initSelect2 = function(_client){
 			if(_client && _client.level){
@@ -20,20 +21,21 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 			if (!jQuery().tagsInput) {
 	            return;
 	        }
-	        $('#client_label').tagsInput({
-	            width: 'auto',
-	            defaultText: '添加标签',
-	            'onAddTag': function () {
-	                //alert(1);
-	            },
-	            'onChange': function(){
-	            	_orderInfo.client.label = $('#client_label').val();
-	            }
-	        });
+			if(!$('#client_label').data('isTagsInputObj')){
+				$('#client_label').tagsInput({
+		            width: 'auto',
+		            defaultText: '添加标签',
+		            'onAddTag': function () {
+		                //alert(1);
+		            }
+		        });
+		        $('#client_label').data('isTagsInputObj',true);
+			}
 	        if(_orderInfo && _orderInfo.client){
+	        	$('#client_label').val('');
+	        	$('#client_label').removeTag('');
 	        	$('#client_label').tagsInput.importTags('#client_label',_orderInfo.client.label);
 	        }
-	        
 		};
 		
 		let onShowTab1 = function(){
@@ -234,37 +236,24 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		};
 		
 		let onShowTab4 = function(){
-			Metronic.blockUI({
-                target: "#tab_4",
-                animate: true,
-                overlayColor: 'none'
-            });
-			$http.post(
-	            'getOperators'
-	        ).then(function(response) {
-	        	let res = response.data;
-	        	if(res.isSuccess){
-	        		$scope.operators = res.data.allOperators;
-	        		if($scope.operators && $scope.orderInfo && $scope.orderInfo.order && $scope.orderInfo.order.salespersonId){
-	        			let sel = $scope.operators.filter(function(node,index){
-	        				return node.userId == $scope.orderInfo.order.salespersonId;
-	        			});
-	        			if(sel && sel.length>0){
-	        				$scope.salesperson.selected = sel[0];
-	        			}
-	        		}
-	        	}
-	        	Metronic.unblockUI("#tab_4");
-	        },function(){
-	        	Metronic.unblockUI("#tab_4");
-	        	Metronic.alert({
-                    type: 'danger',
-                    icon: 'warning',
-                    message: '获取订单数据失败',
-                    container: '#orderEditPanel',
-                    place: 'prepend'
-                });
-	        });
+		};
+		
+		let initOperator = function(){
+			if($scope.orderInfo && $scope.orderInfo.order && $scope.orderInfo.order.salespersonId){
+    			let sel = $scope.operators.filter(function(node,index){
+    				return node.userId == $scope.orderInfo.order.salespersonId;
+    			});
+    			if(sel && sel.length>0){
+    				$scope.salesperson.selected = sel[0];
+    			}
+    		}else{
+    			let sel = $scope.operators.filter(function(node,index){
+    				return node.userId == $scope.author.userId;
+    			});
+    			if(sel && sel.length>0){
+    				$scope.salesperson.selected = sel[0];
+    			}
+    		}
 		};
 		
 		let loadTab1 = function(){
@@ -273,60 +262,84 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
                 animate: true,
                 overlayColor: 'none'
             });
-			if(orderId){
-				//修改
-				$http.post(
-		            'views/orders/getOrderInfo',
-		            {orderId:orderId}
-		        ).then(function(response) {
-		        	let res = response.data;
-		        	$log.log(res);
-		        	if(res.isSuccess){
-		        		$scope.orderInfo = res.data.orderInfo;
-		        		$scope.orderNumber = res.data.orderInfo.order.orderNumber;
-		        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
-		        		initTags($scope.orderInfo);
-		        	}
-		        	Metronic.unblockUI("#orderEditPanel");
-		        },function(){
-		        	Metronic.unblockUI("#orderEditPanel");
-		        	Metronic.alert({
-                        type: 'danger',
-                        icon: 'warning',
-                        message: '获取订单数据失败',
-                        container: '#orderEditPanel',
-                        place: 'prepend'
-                    });
-		        });
-			}else{
-				//新增
-				$http.post(
-		            'views/orders/getOrderNumber'
-		        ).then(function(response) {
-		        	let res = response.data;
-		        	if(res.isSuccess){
-		        		$scope.orderNumber = res.data.orderNumber;
-		        	}else{
-		        		Metronic.alert({
+			$http.post(
+	            'getOperators'
+	        ).then(function(response) {
+	        	let res = response.data;
+	        	if(res.isSuccess && res.data && res.data.allOperators){
+	        		$scope.operators = res.data.allOperators;
+	        		$scope.author = res.data.author;
+	        	}
+	        },function(){
+	        	Metronic.unblockUI("#orderEditPanel");
+	        	Metronic.alert({
+                    type: 'danger',
+                    icon: 'warning',
+                    message: '获取订单数据失败',
+                    container: '#orderEditPanel',
+                    place: 'prepend'
+                });
+	        }).then(function(_res){
+	        	if(orderId){
+					//修改
+					$http.post(
+			            'views/orders/getOrderInfo',
+			            {orderId:orderId}
+			        ).then(function(response) {
+			        	let res = response.data;
+			        	$log.log(res);
+			        	if(res.isSuccess){
+			        		$scope.orderInfo = res.data.orderInfo;
+			        		$scope.orderNumber = res.data.orderInfo.order.orderNumber;
+			        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
+			        		initTags($scope.orderInfo);
+			        	}
+			        	Metronic.unblockUI("#orderEditPanel");
+			        },function(){
+			        	Metronic.unblockUI("#orderEditPanel");
+			        	Metronic.alert({
+	                        type: 'danger',
+	                        icon: 'warning',
+	                        message: '获取订单数据失败',
+	                        container: '#orderEditPanel',
+	                        place: 'prepend'
+	                    });
+			        }).then(function(){
+			        	initOperator();
+			        });
+				}else{
+					//新增
+					$http.post(
+			            'views/orders/getOrderNumber'
+			        ).then(function(response) {
+			        	let res = response.data;
+			        	if(res.isSuccess){
+			        		$scope.orderNumber = res.data.orderNumber;
+			        	}else{
+			        		Metronic.alert({
+		                        type: 'danger',
+		                        icon: 'warning',
+		                        message: '获取订单号失败',
+		                        container: '#orderEditPanel',
+		                        place: 'prepend'
+		                    });
+			        	}
+			        	Metronic.unblockUI("#orderEditPanel");
+			        },function(){
+			        	Metronic.unblockUI("#orderEditPanel");
+			        	Metronic.alert({
 	                        type: 'danger',
 	                        icon: 'warning',
 	                        message: '获取订单号失败',
 	                        container: '#orderEditPanel',
 	                        place: 'prepend'
 	                    });
-		        	}
-		        	Metronic.unblockUI("#orderEditPanel");
-		        },function(){
-		        	Metronic.unblockUI("#orderEditPanel");
-		        	Metronic.alert({
-                        type: 'danger',
-                        icon: 'warning',
-                        message: '获取订单号失败',
-                        container: '#orderEditPanel',
-                        place: 'prepend'
-                    });
-		        });
-			}
+			        }).then(function(){
+			        	initOperator();
+			        });
+				}
+	        });
+			
 			$('.date-picker').each(function(index,el){
 		    	console.log($(el).attr('data-date'));
 		    })
@@ -344,45 +357,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 
 		};
 		
-		$scope.addGoods = function(){
-			
-		};
-		$scope.saveGoods = function(){
-			
-		};
-		$scope.cancelGoods = function(){
-			
-		};
-		
-		let getClientData = function(){
-			if($scope.orderInfo && $scope.orderInfo.client){
-				if(typeof $scope.orderInfo.client.birthday != 'string'){
-					$scope.orderInfo.client.birthday = $filter('date')($scope.orderInfo.client.birthday,'yyyy-MM-dd');
-				}
-			}
-		};
-		
-		$scope.saveOrder = function(){
-			getClientData();
-			$log.log($scope.orderInfo, $scope.salesperson.selected);
-		};
-		
-		$scope.open = function($event) {
-	    	$event.preventDefault();
-	    	$event.stopPropagation();
-
-	    	$scope.opened = true;
-	  	};
-	  	
-	  	$scope.dateOptions = {
-  			language: 'zh-CN',
-            autoclose: true,
-            todayHighlight: true,
-            showWeeks: false,
-	    	startingDay: 1
-	  	};
-	  	
-	  	let handleBootstrapTouchSpin = function() {
+		let handleBootstrapTouchSpin = function() {
 	        $(".maiqi-spin-quantity").TouchSpin({          
 	            buttondown_class: 'btn green',
 	            buttonup_class: 'btn green',
@@ -405,7 +380,81 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 	            postfix: '折'
 	        });
 	    };
-	    
+		
+		let getClientData = function(){
+			if(typeof $scope.orderInfo.client.birthday != 'string'){
+				$scope.orderInfo.client.birthday = $filter('date')($scope.orderInfo.client.birthday,'yyyy-MM-dd');
+			}
+			$scope.orderInfo.client.label = $('#client_label').val();
+		};
+		
+		let getOrderData = function(){
+			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected.userId;
+		};
+		
+		$scope.addGoods = function(){
+			
+		};
+		$scope.saveGoods = function(){
+			
+		};
+		$scope.cancelGoods = function(){
+			
+		};
+		
+		$scope.saveOrder = function(){
+			getClientData();
+			getOrderData();
+			$log.log($scope.orderInfo, $scope.salesperson.selected);
+		};
+		
+		$scope.open = function($event) {
+	    	$event.preventDefault();
+	    	$event.stopPropagation();
+
+	    	$scope.opened = true;
+	  	};
+	  	
+	  	$scope.dateOptions = {
+  			language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            showWeeks: false,
+	    	startingDay: 1
+	  	};
+	  	
+		$scope.getClientByPhoneNum = function(){
+			if($scope.orderInfo.client.phoneNum){
+				Metronic.blockUI({
+	                target: "#tab_1",
+	                animate: true,
+	                overlayColor: 'none'
+	            });
+				$http.post(
+		            'views/orders/getClientByPhoneNum',
+		            {phoneNum:$scope.orderInfo.client.phoneNum}
+		        ).then(function(response) {
+		        	let res = response.data;
+		        	$log.log(res);
+		        	if(res.isSuccess){
+		        		$scope.orderInfo.client = res.data.client;
+		        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
+		        		initTags($scope.orderInfo);
+		        	}
+		        	Metronic.unblockUI("#tab_1");
+		        },function(){
+		        	Metronic.unblockUI("#tab_1");
+		        	Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '获取订单数据失败',
+                        container: '#tab_1',
+                        place: 'prepend'
+                    });
+		        });
+			}
+		};
+	  	
 		let showTabHandler = function(){
 			let scope = $scope;
 			$('a[data-toggle="tab"]').on('shown.bs.tab',function(e){

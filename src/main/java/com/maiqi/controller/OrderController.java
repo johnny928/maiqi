@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.maiqi.component.DataTableResult;
 import com.maiqi.component.JsonResult;
 import com.maiqi.component.SessionManager;
+import com.maiqi.service.ClientService;
 import com.maiqi.service.OrderService;
 import com.maiqi.service.UserService;
 
@@ -35,6 +36,9 @@ public class OrderController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ClientService clientService;
 	
 	@RequestMapping(value={"/orders"})
 	public String ordersPage(Model model){
@@ -217,6 +221,38 @@ public class OrderController {
 			jresult.setRecordsFiltered(0);
 			jresult.setRecordsTotal(0);
 		}
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/saveOrderInfo"})
+	@ResponseBody
+	public JsonResult saveOrderInfo(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			resM.put("orderInfo", orderService.getOrderInfo((String)params.get("orderId")));
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("获取数据出现异常！");
+		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/getClientByPhoneNum"})
+	@ResponseBody
+	public JsonResult getClientByPhoneNum(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			resM.put("client", clientService.getClientByPhoneNum((String)params.get("phoneNum")));
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("获取数据出现异常！");
+		}		
 		return jresult;
 	}
 	

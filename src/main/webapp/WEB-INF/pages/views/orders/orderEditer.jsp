@@ -55,9 +55,9 @@
 											<div class="col-sm-4">
 												<div class="input-group">
 													<span class="input-group-addon">
-									<i class="fa fa-phone"></i>
-									</span>
-													<input type="text" class="form-control" ng-model="orderInfo.client.phoneNum"/>
+														<i class="fa fa-phone"></i>
+													</span>
+													<input type="text" class="form-control" ng-model="orderInfo.client.phoneNum" ng-change="getClientByPhoneNum()"/>
 												</div>
 												<p class="help-block">
 													E.g: 136XXXXXXXX.<br>

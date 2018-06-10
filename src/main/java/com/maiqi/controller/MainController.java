@@ -76,6 +76,7 @@ public class MainController {
 		Map resM = new HashMap();
 		try{
 			resM.put("allOperators", userService.getAllOperators());
+			resM.put("author", sessionManager.getAuthor());
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){

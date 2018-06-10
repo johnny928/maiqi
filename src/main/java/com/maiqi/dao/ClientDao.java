@@ -13,4 +13,6 @@ public interface ClientDao {
 	public int createClient(Client client);
 	
 	public int saveClient(Client client);
+	
+	public Client selectClientByPhoneNum(String phoneNum);
 }
