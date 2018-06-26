@@ -200,8 +200,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/plugins/jquery-tags-input/jquery.tagsinput.css',
 	                        
 	                        'assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js',
+	                        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
 	                        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
 	                        'assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
+	                        'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
 	                        'assets/global/plugins/select2/select2.min.js',
 	                        'assets/global/plugins/datatables/all.min.js',
 	

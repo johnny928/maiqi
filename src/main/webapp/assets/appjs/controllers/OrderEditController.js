@@ -21,26 +21,27 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 			if (!jQuery().tagsInput) {
 	            return;
 	        }
-			if(!$('#client_label').data('isTagsInputObj')){
-				$('#client_label').tagsInput({
+			if(!$('.client_label').data('isTagsInputObj')){
+				$('.client_label').tagsInput({
 		            width: 'auto',
 		            defaultText: '添加标签',
 		            'onAddTag': function () {
 		                //alert(1);
 		            }
 		        });
-		        $('#client_label').data('isTagsInputObj',true);
+		        $('.client_label').data('isTagsInputObj',true);
 			}
 	        if(_orderInfo && _orderInfo.client){
-	        	$('#client_label').val('');
-	        	$('#client_label').removeTag('');
-	        	$('#client_label').tagsInput.importTags('#client_label',_orderInfo.client.label);
+	        	$('.client_label').val('');
+	        	$('.client_label').removeTag('');
+	        	$('.client_label').tagsInput.importTags('.client_label',_orderInfo.client.label);
 	        }
 		};
 		
 		let onShowTab1 = function(){
 			
 		};
+		
 		let onShowTab2 = function(){
 			if($.fn.DataTable.isDataTable("#goods-list")){
 				return ;
@@ -102,13 +103,13 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		                		let eles ;
 		                		if(rowData.cnt == 0){
 		                			eles = ['<div>',
-			                		            '<button class="btn btn-xs purple" ng-click="addGoods(\''+rowData.goodsId+'\')">添加商品 </button>',
+			                		            '<button class="btn btn-xs purple" ng-click="addGoods(\''+row+'\')">添加商品 </button>',
 			                		            '<p></p>',
 		                		            '</div>'];
 		                		}else{
 		                			eles = ['<div><button class="btn btn-xs btn-success" ng-click="saveGoods(\''+rowData.goodsId+'\')">保存修改 </button>',
 			                		            '<p></p>',
-			                		            '<button class="btn btn-xs green-stripe" ng-click="cancelGoods(\''+rowData.goodsId+'\')">取消选择 </button>',
+			                		            '<button class="btn btn-xs green-stripe cancel-goods" data-toggle="confirmation" data-placement="top" data-goodsId="'+rowData.goodsId+'">取消选择</button>',
 			            		            '</div>'];
 		                		}      
 		                		let html = eles.join('\n');
@@ -120,9 +121,11 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 	            onError: function (grid) {
 	            }
 			});
+			$scope.tab2 = {goodsList: oTable};
 			
 			$("#goods-list").on('init.dt draw.dt',function (e, settings, data){
 				handleBootstrapTouchSpin();
+				handleConfirm();
 			});
 			
 			$('#goods-search').on('click',function(e){
@@ -380,32 +383,167 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 	            postfix: '折'
 	        });
 	    };
+	    
+	    let handleConfirm = function(){
+			$('.cancel-goods').confirmation({
+				title: '确认从已购列表中剔除此项商品？',
+				onConfirm: function(event,el){
+					let goodsId = el.attr('data-goodsid');
+					$scope.cancelGoods(goodsId);
+				}
+			})
+	    };
 		
 		let getClientData = function(){
 			if(typeof $scope.orderInfo.client.birthday != 'string'){
 				$scope.orderInfo.client.birthday = $filter('date')($scope.orderInfo.client.birthday,'yyyy-MM-dd');
 			}
-			$scope.orderInfo.client.label = $('#client_label').val();
+			$scope.orderInfo.client.label = $('.client_label').val();
 		};
 		
 		let getOrderData = function(){
 			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected.userId;
 		};
 		
-		$scope.addGoods = function(){
+		$scope.addGoods = function(_row){
+			$log.log($scope.tab2.goodsList.getDataTable().row(_row).data());
+			let rowObj = $scope.tab2.goodsList.getDataTable().row(_row);
+			let _goods = rowObj.data();
+			let _quantity = rowObj.to$().find('.maiqi-spin-quantity').val();
 			
+			$scope.saveGoods(_goods,_quantity);
 		};
-		$scope.saveGoods = function(){
-			
+		$scope.saveGoods = function(_goods,_quantity){
+			Metronic.blockUI({
+                target: "#orderEditPanel",
+                animate: true,
+                overlayColor: 'none'
+            });
+			$http.post(
+	            'views/orders/saveOrderDetail',
+	            {orderId:orderId, goods:_goods, quantity:_quantity}
+	        ).then(function(response) {
+	        	let res = response.data;
+	        	if(res.isSuccess){
+	        		Metronic.unblockUI("#orderEditPanel");
+		        	Metronic.alert({
+	                    type: 'success',
+	                    icon: 'check',
+	                    message: '保存成功！',
+	                    container: '#orderEditPanel',
+	                    place: 'prepend'
+	                });
+	        	}else{
+	        		Metronic.unblockUI("#orderEditPanel");
+		        	Metronic.alert({
+	                    type: 'danger',
+	                    icon: 'warning',
+	                    message: '保存出错！Error:'+res.message,
+	                    container: '#orderEditPanel',
+	                    place: 'prepend'
+	                });
+	        	}
+	        },function(){
+	        	Metronic.unblockUI("#orderEditPanel");
+	        	Metronic.alert({
+                    type: 'danger',
+                    icon: 'warning',
+                    message: '保存失败',
+                    container: '#orderEditPanel',
+                    place: 'prepend'
+                });
+	        });
 		};
-		$scope.cancelGoods = function(){
-			
+		$scope.cancelGoods = function(_goodsId){
+			Metronic.blockUI({
+                target: "#orderEditPanel",
+                animate: true,
+                overlayColor: 'none'
+            });
+			$http.post(
+	            'views/orders/cancelGoods',
+	            {orderId:orderId,goodsId:_goodsId}
+	        ).then(function(response) {
+	        	let res = response.data;
+	        	if(res.isSuccess){
+	        		if($scope.tab2 && $scope.tab2.goodsList){
+	        			$scope.tab2.goodsList.getDataTable().ajax.reload();
+	        		}
+	        		Metronic.unblockUI("#orderEditPanel");
+		        	Metronic.alert({
+	                    type: 'success',
+	                    icon: 'check',
+	                    message: '保存成功！',
+	                    container: '#orderEditPanel',
+	                    place: 'prepend'
+	                });
+	        	}else{
+	        		Metronic.unblockUI("#orderEditPanel");
+		        	Metronic.alert({
+	                    type: 'danger',
+	                    icon: 'warning',
+	                    message: '保存出错！Error:'+res.message,
+	                    container: '#orderEditPanel',
+	                    place: 'prepend'
+	                });
+	        	}
+	        	
+	        },function(){
+	        	Metronic.unblockUI("#orderEditPanel");
+	        	Metronic.alert({
+                    type: 'danger',
+                    icon: 'warning',
+                    message: '保存失败',
+                    container: '#orderEditPanel',
+                    place: 'prepend'
+                });
+	        });
 		};
 		
 		$scope.saveOrder = function(){
 			getClientData();
 			getOrderData();
 			$log.log($scope.orderInfo, $scope.salesperson.selected);
+			Metronic.blockUI({
+                target: "#orderEditPanel",
+                animate: true,
+                overlayColor: 'none'
+            });
+			$http.post(
+	            'views/orders/saveOrderInfo',
+	            {client:$scope.orderInfo.client,order:$scope.orderInfo.order}
+	        ).then(function(response) {
+	        	let res = response.data;
+	        	if(res.isSuccess){
+	        		Metronic.unblockUI("#orderEditPanel");
+		        	Metronic.alert({
+	                    type: 'success',
+	                    icon: 'check',
+	                    message: '保存成功！',
+	                    container: '#orderEditPanel',
+	                    place: 'prepend'
+	                });
+	        	}else{
+	        		Metronic.unblockUI("#orderEditPanel");
+		        	Metronic.alert({
+	                    type: 'danger',
+	                    icon: 'warning',
+	                    message: '保存出错！Error:'+res.message,
+	                    container: '#orderEditPanel',
+	                    place: 'prepend'
+	                });
+	        	}
+	        	
+	        },function(){
+	        	Metronic.unblockUI("#orderEditPanel");
+	        	Metronic.alert({
+                    type: 'danger',
+                    icon: 'warning',
+                    message: '保存失败',
+                    container: '#orderEditPanel',
+                    place: 'prepend'
+                });
+	        });
 		};
 		
 		$scope.open = function($event) {

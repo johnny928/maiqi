@@ -18,6 +18,10 @@ import com.google.gson.Gson;
 import com.maiqi.component.DataTableResult;
 import com.maiqi.component.JsonResult;
 import com.maiqi.component.SessionManager;
+import com.maiqi.component.Utils;
+import com.maiqi.po.Client;
+import com.maiqi.po.Goods;
+import com.maiqi.po.Order;
 import com.maiqi.service.ClientService;
 import com.maiqi.service.OrderService;
 import com.maiqi.service.UserService;
@@ -230,12 +234,18 @@ public class OrderController {
 		JsonResult jresult = new JsonResult();
 		Map resM = new HashMap();
 		try{
-			resM.put("orderInfo", orderService.getOrderInfo((String)params.get("orderId")));
+			Gson gson = new Gson();
+			Client client = new Client();
+			Order order = new Order();
+			Utils.populate(client,(Map)params.get("client"));
+			Utils.populate(order,(Map)params.get("order"));
+			orderService.saveOrderInfo(order, client);
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
+			e.printStackTrace();
 		}		
 		return jresult;
 	}
@@ -252,6 +262,49 @@ public class OrderController {
 		}catch(Exception e){
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
+		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/saveOrderDetail"})
+	@ResponseBody
+	public JsonResult saveOrderDetail(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			String orderId = (String) params.get("orderId");
+			Goods goods = new Goods();
+			Utils.populate(goods, (Map)params.get("goods"));
+			Integer quantity = Utils.isEmpty(params.get("quantity")) ? 0: (Integer)params.get("quantity");
+			resM.put("orderDetail", orderService.saveOrderDetail(orderId, goods, quantity));
+			if(Utils.isEmpty(resM.get("orderDetail"))){
+				jresult.setMessage("缺少參數。");
+				jresult.setIsSuccess(0);
+			}else{
+				jresult.setData(resM);
+				jresult.setIsSuccess(1);
+			}
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("保存数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/cancelGoods"})
+	@ResponseBody
+	public JsonResult cancelGoods(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			resM.put("cancelRows", orderService.cancelOrderDetail(params));
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("保存数据出现异常！");
+			e.printStackTrace();
 		}		
 		return jresult;
 	}

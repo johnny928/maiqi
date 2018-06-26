@@ -53,6 +53,14 @@
 		SELECT count(1) cnt from t_orderdetails t where orderId = #{orderId} and isValid = 1
 	</select>
 	
+		
+	<select id="getOrderDetailByGoodsId" parameterType="Map" resultMap="OrderDetail">
+		SELECT * FROM t_orderdetails where orderId=#{orderId} and isValid=1 and goodsId=#{goodsId}
+	</select>
+	
+	<update id="cancelGoods" parameterType="Map">  
+        update t_orderdetails set isValid=0 WHERE orderId=#{orderId} and goodsId=#{goodsId}
+	</update>	
 
 	<!-- 插入语句 -->
 	<insert id="createOrderDetail" parameterType="com.maiqi.po.OrderDetail" >

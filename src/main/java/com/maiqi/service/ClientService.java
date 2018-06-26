@@ -19,4 +19,15 @@ public class ClientService {
 		}
 		return clientDao.selectClientByPhoneNum(phoneNum);
 	}
+	
+	public int saveClient(Client client){
+		if(Utils.isEmpty(client)){
+			return 0;
+		}
+		if(Utils.isEmpty(client.getClientId())){
+			return clientDao.createClient(client);
+		}else{
+			return clientDao.saveClient(client);
+		}
+	}
 }

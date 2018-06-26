@@ -1,5 +1,6 @@
 package com.maiqi.service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +10,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maiqi.component.SessionManager;
+import com.maiqi.component.Utils;
 import com.maiqi.dao.ClientDao;
 import com.maiqi.dao.GoodsDao;
 import com.maiqi.dao.OrderDao;
 import com.maiqi.dao.OrderDetailDao;
 import com.maiqi.po.Client;
+import com.maiqi.po.Goods;
 import com.maiqi.po.Order;
 import com.maiqi.po.OrderDetail;
 
@@ -32,6 +36,12 @@ public class OrderService {
 	
 	@Autowired
 	private GoodsDao goodsDao;
+	
+	@Autowired
+	private ClientService clientService;
+	
+	@Autowired
+	private SessionManager sessionManager;
 	
 	public List<Map<String,Object>> getOrdersList(Map params){
 		return orderDao.selectOrders4V(params);
@@ -79,7 +89,63 @@ public class OrderService {
 		return orderDetailDao.selectOrderDetails4VCnt(params);
 	}
 	
-	public void saveOrderInfo(){
-		
+	public int saveOrder(Order order){
+		if(Utils.isEmpty(order)){
+			return 0;
+		}
+		if(Utils.isEmpty(order.getOrderId())){
+			return orderDao.createOrder(order);
+		}else{
+			return orderDao.saveOrder(order);
+		}
+	}
+	
+	public void saveOrderInfo(Order order,Client client){
+		if(Utils.isEmpty(order) || Utils.isEmpty(client)){
+			return;
+		}
+		clientService.saveClient(client);
+		order.setClientId(client.getClientId());
+		saveOrder(order);
+	}
+	
+	public OrderDetail saveOrderDetail(String orderId, Goods goods, Integer quantity){
+		if(Utils.isEmpty(orderId) || Utils.isEmpty(goods) || Utils.isEmpty(goods.getGoodsId())){
+			return null;
+		}
+		Map params = new HashMap();
+		params.put("orderId", orderId);
+		params.put("goodsId", goods.getGoodsId());
+		OrderDetail orderDetail = orderDetailDao.getOrderDetailByGoodsId(params);
+		if(Utils.isEmpty(orderDetail)){
+			orderDetail = new OrderDetail();
+			orderDetail.setCreateUserId(sessionManager.getAuthor().getUserId());
+			orderDetail.setGoodsId(goods.getGoodsId());
+			orderDetail.setGoodsName(goods.getGoodsName());
+			orderDetail.setOrgPrice(goods.getOrgPrice());
+			orderDetail.setGoodsDesc(goods.getGoodsDesc());
+			orderDetail.setOrderId(orderId);
+			orderDetail.setQuantity(quantity);
+			orderDetail.setDiscount(new BigDecimal(1));
+			orderDetail.setPrice(orderDetail.getOrgPrice().multiply(new BigDecimal(orderDetail.getQuantity())));
+			orderDetail.setTotalPrice(orderDetail.getPrice().multiply(orderDetail.getDiscount()));
+			orderDetailDao.createOrderDetail(orderDetail);
+		}else{
+			orderDetail.setQuantity(quantity);
+			orderDetailDao.saveOrderDetail(orderDetail);
+		}
+		return orderDetail;
+	}
+	
+	public int cancelOrderDetail(Map params){
+		if(Utils.isEmpty(params)){
+			return 0;
+		}
+		String orderId = (String) params.get("orderId");
+		String goodsId = (String) params.get("goodsId");
+		if(Utils.isEmpty(orderId) || Utils.isEmpty(goodsId)){
+			return 0;
+		}
+		return orderDetailDao.cancelGoods(params);
 	}
 }

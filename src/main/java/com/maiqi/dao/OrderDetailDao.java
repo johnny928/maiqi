@@ -18,4 +18,8 @@ public interface OrderDetailDao {
 	public List<Map<String,Object>> selectOrderDetails4V(Map<String,Object> params);
 	
 	public int selectOrderDetails4VCnt(Map<String,Object> params);
+	
+	public OrderDetail getOrderDetailByGoodsId(Map<String,Object> params);
+	
+	public int cancelGoods(Map<String,Object> params);
 }

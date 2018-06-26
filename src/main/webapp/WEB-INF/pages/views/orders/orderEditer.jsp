@@ -144,7 +144,7 @@
 													<span class="input-group-addon">
 													<i class="fa fa-th-list"></i>
 													</span>
-													<input id="client_label" type="text" class="form-control tags" />
+													<input type="text" class="form-control tags client_label" />
 												</div>
 												<p class="help-block">
 													描述客户特点，例如：回头客，蓝领等。 </code>
