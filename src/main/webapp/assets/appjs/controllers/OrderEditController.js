@@ -103,11 +103,11 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		                		let eles ;
 		                		if(rowData.cnt == 0){
 		                			eles = ['<div>',
-			                		            '<button class="btn btn-xs purple" ng-click="addGoods(\''+row+'\')">添加商品 </button>',
+			                		            '<button class="btn btn-xs purple" ng-click="saveGoods(\''+row+'\')">添加商品 </button>',
 			                		            '<p></p>',
 		                		            '</div>'];
 		                		}else{
-		                			eles = ['<div><button class="btn btn-xs btn-success" ng-click="saveGoods(\''+rowData.goodsId+'\')">保存修改 </button>',
+		                			eles = ['<div><button class="btn btn-xs btn-success" ng-click="saveGoods(\''+row+'\')">保存修改 </button>',
 			                		            '<p></p>',
 			                		            '<button class="btn btn-xs green-stripe cancel-goods" data-toggle="confirmation" data-placement="top" data-goodsId="'+rowData.goodsId+'">取消选择</button>',
 			            		            '</div>'];
@@ -405,26 +405,26 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected.userId;
 		};
 		
-		$scope.addGoods = function(_row){
-			$log.log($scope.tab2.goodsList.getDataTable().row(_row).data());
+		$scope.saveGoods = function(_row){
 			let rowObj = $scope.tab2.goodsList.getDataTable().row(_row);
 			let _goods = rowObj.data();
-			let _quantity = rowObj.to$().find('.maiqi-spin-quantity').val();
+			let _quantity = rowObj.nodes().to$().find('.maiqi-spin-quantity').val();
 			
-			$scope.saveGoods(_goods,_quantity);
-		};
-		$scope.saveGoods = function(_goods,_quantity){
 			Metronic.blockUI({
                 target: "#orderEditPanel",
                 animate: true,
                 overlayColor: 'none'
             });
+			$log.log({orderId:orderId, goods:_goods, quantity:_quantity});
 			$http.post(
 	            'views/orders/saveOrderDetail',
 	            {orderId:orderId, goods:_goods, quantity:_quantity}
 	        ).then(function(response) {
 	        	let res = response.data;
 	        	if(res.isSuccess){
+	        		if($scope.tab2 && $scope.tab2.goodsList){
+	        			$scope.tab2.goodsList.getDataTable().ajax.reload();
+	        		}
 	        		Metronic.unblockUI("#orderEditPanel");
 		        	Metronic.alert({
 	                    type: 'success',

@@ -68,7 +68,7 @@
 			t.orderNumber, 
 			(select client.clientName from t_client client where client.clientId = t.clientId ) clientName,
 			t.totalPrice,
-			(select count(1) from t_orderdetails detail where detail.orderId = t.orderId) goodsCnt,
+			(select count(1) from t_orderdetails detail where detail.orderId = t.orderId and isValid=1) goodsCnt,
 			(select t_user.userName from t_user where t_user.userId = t.salespersonId) salesperson  
 		FROM t_Order t
 			<include refid="order_list_whereCls"/>

@@ -275,7 +275,7 @@ public class OrderController {
 			String orderId = (String) params.get("orderId");
 			Goods goods = new Goods();
 			Utils.populate(goods, (Map)params.get("goods"));
-			Integer quantity = Utils.isEmpty(params.get("quantity")) ? 0: (Integer)params.get("quantity");
+			Integer quantity = Utils.isEmpty(params.get("quantity")) ? 0: new Integer((String)params.get("quantity"));
 			resM.put("orderDetail", orderService.saveOrderDetail(orderId, goods, quantity));
 			if(Utils.isEmpty(resM.get("orderDetail"))){
 				jresult.setMessage("缺少參數。");
