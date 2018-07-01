@@ -3,6 +3,7 @@ package com.maiqi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maiqi.component.SessionManager;
 import com.maiqi.component.Utils;
 import com.maiqi.dao.ClientDao;
 import com.maiqi.po.Client;
@@ -12,6 +13,9 @@ public class ClientService {
 
 	@Autowired
 	private ClientDao clientDao;
+	
+	@Autowired
+	private SessionManager sessionManager;
 	
 	public Client getClientByPhoneNum(String phoneNum){
 		if(Utils.isEmpty(phoneNum)){
@@ -25,6 +29,7 @@ public class ClientService {
 			return 0;
 		}
 		if(Utils.isEmpty(client.getClientId())){
+			client.setCreateUserId(sessionManager.getAuthor().getUserId());
 			return clientDao.createClient(client);
 		}else{
 			return clientDao.saveClient(client);

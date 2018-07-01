@@ -109,7 +109,7 @@ public class OrderService {
 		saveOrder(order);
 	}
 	
-	public OrderDetail saveOrderDetail(String orderId, Goods goods, Integer quantity){
+	public OrderDetail saveOrderDetail(String orderId, Goods goods, Integer quantity, BigDecimal discount){
 		if(Utils.isEmpty(orderId) || Utils.isEmpty(goods) || Utils.isEmpty(goods.getGoodsId())){
 			return null;
 		}
@@ -124,14 +124,26 @@ public class OrderService {
 			orderDetail.setGoodsName(goods.getGoodsName());
 			orderDetail.setOrgPrice(goods.getOrgPrice());
 			orderDetail.setGoodsDesc(goods.getGoodsDesc());
+			orderDetail.setLabel(goods.getLabel());
 			orderDetail.setOrderId(orderId);
 			orderDetail.setQuantity(quantity);
-			orderDetail.setDiscount(new BigDecimal(1));
-			orderDetail.setPrice(orderDetail.getOrgPrice().multiply(new BigDecimal(orderDetail.getQuantity())));
-			orderDetail.setTotalPrice(orderDetail.getPrice().multiply(orderDetail.getDiscount()));
+			orderDetail.setDiscount(new BigDecimal(10));//10折，即不打折
+			orderDetail.setPrice(orderDetail.getOrgPrice()
+					.multiply(new BigDecimal(orderDetail.getQuantity())));
+			orderDetail.setTotalPrice(Utils.round(orderDetail.getPrice()
+					.multiply(orderDetail.getDiscount()
+							.divide(new BigDecimal(10)))
+							,2));
 			orderDetailDao.createOrderDetail(orderDetail);
 		}else{
 			orderDetail.setQuantity(quantity);
+			orderDetail.setDiscount(discount);
+			orderDetail.setPrice(orderDetail.getOrgPrice()
+					.multiply(new BigDecimal(orderDetail.getQuantity())));
+			orderDetail.setTotalPrice(Utils.round(orderDetail.getPrice()
+					.multiply(orderDetail.getDiscount()
+							.divide(new BigDecimal(10)))
+							,2));
 			orderDetailDao.saveOrderDetail(orderDetail);
 		}
 		return orderDetail;

@@ -206,6 +206,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
 	                        'assets/global/plugins/select2/select2.min.js',
 	                        'assets/global/plugins/datatables/all.min.js',
+	                        'assets/global/plugins/mathjs/math.min.js',
 	
 	                        'assets/global/scripts/datatable.js',
 	                        'assets/appjs/scripts/table-ajax.js',
@@ -237,7 +238,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 	                        'assets/global/plugins/select2/select2.min.js',
 	                        'assets/global/plugins/datatables/all.min.js',
-	
+	                        'assets/global/plugins/jquery-tags-input/jquery.tagsinput.css',
+	                        
+	                        'assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js',	
+	                        'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
+	                        'assets/global/scripts/maiqi/maiqi.js',
 	                        'assets/global/scripts/datatable.js',
 	                        'assets/appjs/scripts/table-ajax.js',
 	                        'assets/admin/pages/scripts/goods.js',

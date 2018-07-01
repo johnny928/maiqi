@@ -44,7 +44,7 @@
 			quantity, discount, totalPrice 
 			from t_orderdetails t 
 		where orderId = #{orderId} and isValid = 1
-		order by updateTime desc,quantity desc,goodsName desc
+		order by quantity desc,goodsName desc
 		<include refid="pageSuffix"/>
 	</select>
 	
@@ -79,6 +79,8 @@
 			price,
 			discount,
 			totalPrice,
+			goodsDesc,
+			label,
 			quantity,
 			isValid,
 			createTime,
@@ -96,6 +98,8 @@
 			#{price},
 			#{discount},
 			#{totalPrice},
+			#{goodsDesc},
+			#{label},
 			#{quantity},
 			1,
 			CURRENT_TIMESTAMP(),

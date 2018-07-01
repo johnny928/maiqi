@@ -17,4 +17,6 @@ public interface GoodsDao {
 	public List<Map<String,Object>> selectGoods4V(Map<String,Object> params);
 	
 	public int selectGoods4VCnt(Map<String,Object> params);
+	
+	public int selectGoodsCnt(Map<String,Object> params);
 }

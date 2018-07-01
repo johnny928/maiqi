@@ -39,18 +39,32 @@
 			<if test="goodsDesc !=null and goodsDesc !=''">
 				and goodsDesc like '%${goodsDesc}%'
 			</if>
+			<if test="createDateS !=null and createDateS !=''">
+				and createTime &gt;= str_to_date(#{createDateS, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="createDateE !=null and createDateE !=''">
+				and createTime &lt; DATE_ADD(str_to_date(#{createDateE, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),interval 1 day)
+			</if>
 		</where>
 	</sql>
 	
 	
 	<!-- 查询单条记录 -->
 	<select id="selectGoodsById" parameterType="java.lang.String" resultMap="Goods">
-		SELECT * FROM t_goods WHERE goodsId = #{goodsId} and isValid = 1
+		SELECT * FROM t_goods t WHERE goodsId = #{goodsId} and isValid = 1
 	</select>
 	
 	<!-- 查询多条记录 -->
 	<select id="selectGoods" parameterType="Map" resultMap="Goods">
-		SELECT * FROM t_goods 
+		SELECT * FROM t_goods t
+		<include refid="goods_list_whereCls"/>
+		order by goodsName desc
+		<include refid="pageSuffix"/>
+	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectGoodsCnt" parameterType="Map" resultType="int">
+		SELECT count(1) cnt FROM t_goods t
 		<include refid="goods_list_whereCls"/>
 	</select>
 	
@@ -58,7 +72,8 @@
 	<select id="selectGoods4V" parameterType="Map" resultType="java.util.Map">
 		SELECT goodsId,goodsName,label,orgPrice,goodsDesc,
 			(select sum(quantity) from t_orderdetails where orderId=#{orderId} and goodsId=t.goodsId and isValid=1) quantity,
-			(select count(1) from t_orderdetails where orderId=#{orderId} and goodsId=t.goodsId and isValid=1) cnt from t_goods t 
+			(select count(1) from t_orderdetails where orderId=#{orderId} and goodsId=t.goodsId and isValid=1) cnt,
+			createTime from t_goods t 
 		<include refid="goods_list_whereCls"/>
 		order by quantity desc,goodsName desc
 		<include refid="pageSuffix"/>
@@ -120,9 +135,7 @@
 	        	<if test="goodsDesc !=null and goodsDesc !=''">
 	        		goodsDesc=#{goodsDesc},
 	        	</if>
-	        	<if test="isValid !=null and isValid !=''">
-	        		isValid=#{isValid},
-	        	</if>
+	        	isValid=#{isValid},
 				updateTime=CURRENT_TIMESTAMP(),
 				updateUserId=#{updateUserId} ,
 			</set>

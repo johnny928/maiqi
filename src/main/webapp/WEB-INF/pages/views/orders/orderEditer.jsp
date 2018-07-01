@@ -57,7 +57,8 @@
 													<span class="input-group-addon">
 														<i class="fa fa-phone"></i>
 													</span>
-													<input type="text" class="form-control" ng-model="orderInfo.client.phoneNum" ng-change="getClientByPhoneNum()"/>
+													<input type="text" class="form-control" ng-model="orderInfo.client.phoneNum" ng-change="getClientByPhoneNum()"
+													ng-model-options="{debounce:{default:1000,blur:0}}"/>
 												</div>
 												<p class="help-block">
 													E.g: 136XXXXXXXX.<br>
@@ -166,12 +167,6 @@
 									<div class="col-md-12">
 										<form action="#">
 											<div class="input-group">
-												<!-- <span class="input-group-addon">
-											        <label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'商品名'" ng-true-value="'商品名'"
-			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='商品名'?'商品名':'&nbsp;&nbsp;'}}</label>
-			    									<label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'标签名'" ng-true-value="'商品名'"
-			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='标签名'?'标签名':'&nbsp;&nbsp;'}}</label>
-											    </span> -->
 											    <span class="input-group-btn">
 											    <label class="btn grey-cararra" ng-model="goodsListQueryCond.searchFlag" btn-radio="'商品名'" ng-true-value="'商品名'"
 			    										ng-false-value="'标签名'" >{{goodsListQueryCond.searchFlag=='商品名'?'商品名':'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}}</label>

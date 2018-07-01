@@ -1,5 +1,7 @@
 package com.maiqi.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -276,7 +278,8 @@ public class OrderController {
 			Goods goods = new Goods();
 			Utils.populate(goods, (Map)params.get("goods"));
 			Integer quantity = Utils.isEmpty(params.get("quantity")) ? 0: new Integer((String)params.get("quantity"));
-			resM.put("orderDetail", orderService.saveOrderDetail(orderId, goods, quantity));
+			BigDecimal discount = Utils.isEmpty(params.get("discount")) ? new BigDecimal(10): new BigDecimal((String)params.get("discount"));
+			resM.put("orderDetail", orderService.saveOrderDetail(orderId, goods, quantity, discount));
 			if(Utils.isEmpty(resM.get("orderDetail"))){
 				jresult.setMessage("缺少參數。");
 				jresult.setIsSuccess(0);

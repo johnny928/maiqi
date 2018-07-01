@@ -2,6 +2,7 @@ package com.maiqi.component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -34,5 +35,9 @@ public class Utils {
 		beanUtilsBean.getConvertUtils().register(new org.apache.commons.beanutils.converters.SqlDateConverter(null), java.sql.Date.class);  
 		beanUtilsBean.getConvertUtils().register(new org.apache.commons.beanutils.converters.SqlTimeConverter(null), java.sql.Time.class);  
 		beanUtilsBean.populate(bean, properties);
+	}
+	
+	public static BigDecimal round(BigDecimal num, int r){
+		return num.add(new BigDecimal(0.0000000000000001)).setScale(r, RoundingMode.HALF_UP);
 	}
 }
