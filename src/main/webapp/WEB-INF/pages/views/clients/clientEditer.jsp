@@ -16,7 +16,7 @@
 </div>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
-<div class="row">
+<div class="row" ng-controller="ClientEditCtrl" id="clientEditPanel">
 	<div class="col-md-12">
 		<!-- Begin: life time stats -->
 		<div class="portlet" >
@@ -25,7 +25,7 @@
 					<i class="fa fa-shopping-cart"></i>客户信息
 				</div>
 				<div class="actions">
-					<a href="#" class="btn btn-success">
+					<a href="#" class="btn btn-success" ng-click="saveClient()">
 					<i class="fa fa-check"></i>
 					<span class="hidden-480">
 					保存 </span>
@@ -42,38 +42,45 @@
 					<form action="#" id="form-client" class="form-horizontal form-bordered">
 						<div class="form-group">
 							<label class="col-sm-3 control-label">手机号</label>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<div class="input-group">
 									<span class="input-group-addon">
-									<i class="fa fa-phone"></i>
+										<i class="fa fa-phone"></i>
 									</span>
-									<input type="text" class="form-control" />
+									<input type="text" class="form-control" ng-model="client.phoneNum"/>
 								</div>
 								<p class="help-block">
+									E.g: 136XXXXXXXX.<br>
 								</p>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">姓名</label>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<div class="input-group">
 									<span class="input-group-addon">
-									<i class="fa fa-user"></i>
+										<i class="fa fa-user"></i>
 									</span>
-									<input type="text" class="form-control" />
+									<input type="text" class="form-control" ng-model="client.clientName"/>
 								</div>
 								<p class="help-block">
+									E.g: 张三</code>
 								</p>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label">性别</label>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<div class="input-group">
 									<span class="input-group-addon">
-									<i class="fa fa-female"></i>
-									</span>
-					<input type="checkbox" class="make-switch" data-on-text="男" data-off-text="女">
+					<i class="fa" ng-class="{'fa-female':(client.sex||'女'=='女'),'fa-male':(client.sex=='男')}"></i>
+					</span>
+					<div class="btn-group">
+				        <label class="btn grey-cararra" ng-model="client.sex" btn-radio="'男'" ng-true-value="'男'"
+								ng-false-value="'女'" >{{client.sex=='男'?'男':'&nbsp;&nbsp;'}}</label>
+									<label class="btn grey-cararra" ng-model="client.sex" btn-radio="'女'" ng-true-value="'男'"
+								ng-false-value="'女'" >{{client.sex=='女'?'女':'&nbsp;&nbsp;'}}</label>
+				    </div>
 								</div>
 								<p class="help-block">
 								</p>
@@ -81,13 +88,22 @@
 						</div>
 						<div class="form-group ">
 							<label class="col-sm-3 control-label">出生日期</label>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<div class="input-group">
 									<span class="input-group-addon">
-									<i class="fa fa-birthday-cake"></i>
+										<i class="fa fa-birthday-cake"></i>
 									</span>
-									<input type="text" class="form-control" />
+									<input type="text" readonly class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="client.birthday" is-open="opened" 
+										datepicker-options="dateOptions" 
+										clear-text="清空"
+										close-text="关闭"
+										current-text="今天"
+										ng-required="true" close-text="Close" ng-click="open($event)"/>
+						              <span class="input-group-btn">
+						                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+						              </span>
 								</div>
+								
 								<p class="help-block">
 								</p>
 							</div>
@@ -99,11 +115,14 @@
 									<span class="input-group-addon">
 									<i class="fa fa-diamond"></i>
 									</span>
-									<select class="form-control select2me" data-placeholder="Select...">
+									<select id="client-level" class="form-control select2me" data-placeholder="Select..." 
+									ng-model="client.level">
 										<option value=""></option>
-										<option value="1">Leve.1</option>
-										<option value="2" selected>Leve.2</option>
-										<option value="3">Leve.3</option>
+										<option value="1">Level.1</option>
+										<option value="2">Level.2</option>
+										<option value="3">Level.3</option>
+										<option value="4">Level.4</option>
+										<option value="5">Level.5</option>
 									</select>
 								</div>
 							</div>
@@ -115,13 +134,20 @@
 									<span class="input-group-addon">
 									<i class="fa fa-th-list"></i>
 									</span>
-									<input id="tags_1" type="text" class="form-control tags" value="老会员,朋友,回头客"/>
+									<input type="text" class="form-control tags client_label" />
 								</div>
 								<p class="help-block">
 									描述客户特点，例如：回头客，蓝领等。 </code>
 								</p>
 							</div>
 						</div>
+						<!-- <div class="form-actions">
+							<div class="row">
+								<div class="col-md-offset-3 col-md-3">
+									<button type="button" class="btn purple btn-block"><i class="fa fa-check"></i> 保存</button>
+								</div>
+							</div>
+						</div> -->
 					</form>
 				</div>
 			</div>

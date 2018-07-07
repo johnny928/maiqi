@@ -1,5 +1,6 @@
 package com.maiqi.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.maiqi.component.Author;
 import com.maiqi.component.SecurityUtils;
 import com.maiqi.component.SessionManager;
+import com.maiqi.component.Utils;
 import com.maiqi.dao.UserDao;
 import com.maiqi.po.User;
 
@@ -59,6 +61,28 @@ public class UserService {
 	
 	public List<Map<String,Object>> getAllOperators(){
 		return userDao.selectOperators();
+	}
+	
+	public List<Map<String,Object>> getAllUsers(){
+		return userDao.selectUsers();
+	}
+	
+	public int getAllUsersCnt(){
+		return userDao.selectUsersCnt();
+	}
+	
+	public void saveAllUsers4Proportion(List<Map> ls) throws Exception{
+		if(Utils.isEmpty(ls)){
+			return;
+		}
+		for(Map m : ls){
+			User u = new User();
+			Utils.populate(u, m);
+			if(!Utils.isEmpty(u.getUserId())){
+				u.setUpdateUserId(sessionManager.getAuthor().getUserId());
+				userDao.saveUserProportion(u);
+			}
+		}
 	}
 	
 }

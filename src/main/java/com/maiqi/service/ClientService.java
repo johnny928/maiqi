@@ -1,5 +1,8 @@
 package com.maiqi.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,4 +38,17 @@ public class ClientService {
 			return clientDao.saveClient(client);
 		}
 	}
+	
+	public List<Client> getClientsList(Map params){
+		return clientDao.selectClients(params);
+	}
+	
+	public int getClientsListCnt(Map params){
+		return clientDao.selectClientsCnt(params);
+	}
+	
+	public Client getClientById(String clientId){
+		return clientDao.selectClientById(clientId);
+	}
+	
 }

@@ -4,15 +4,16 @@
 <mapper namespace="com.maiqi.dao.UserDao">
 	<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！ -->
 	<resultMap id="User" type="com.maiqi.po.User">
-		<id column="userId" property="userId" jdbcType="VARCHAR" />
-		<result column="userName" property="userName" jdbcType="VARCHAR" />
-		<result column="loginName" property="loginName" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="isAdmin" property="isAdmin" jdbcType="INTEGER" />
-		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-		<result column="createUserId" property="createUserId" jdbcType="VARCHAR" />
-		<result column="updateUserId" property="updateUserId" jdbcType="VARCHAR" />
+		<id column="userId" property="userId" />
+		<result column="userName" property="userName"/>
+		<result column="loginName" property="loginName" />
+		<result column="password" property="password" />
+		<result column="isAdmin" property="isAdmin" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+		<result column="proportion" property="proportion" />
 	</resultMap>
 	<!-- 查询单条记录 -->
 	<select id="selectUserById" parameterType="java.lang.String" resultMap="User">
@@ -25,8 +26,16 @@
 	</select>
 	
 	<!-- 验证user -->
-	<select id="verifyUser" resultMap="User">
-		SELECT * FROM t_user WHERE loginName = #{loginName, jdbcType=VARCHAR} and password = #{password, jdbcType=VARCHAR}
+	<select id="verifyUser" resultMap="User" parameterType="Map">
+		SELECT * FROM t_user WHERE loginName = #{loginName} and password = #{password}
+	</select>
+	
+	<select id="selectUsers" resultType="java.util.Map">
+		SELECT userId,loginName,userName,proportion FROM t_user 
+	</select>
+	
+	<select id="selectUsersCnt" parameterType="Map" resultType="int">
+		SELECT count(1) cnt FROM t_user 
 	</select>
 
 	<!-- 插入语句 -->
@@ -42,6 +51,11 @@
 		userName,
 		loginName,
 		password,
+		isAdmin,
+		userDesc,
+		proportion,
+		createTime,
+		updateTime,
 		createUserId,
 		updateUserId
 		)
@@ -51,13 +65,42 @@
 		#{userName},
 		#{loginName},
 		#{password},
+		#{isAdmin},
+		#{userDesc},
+		#{proportion},
+		CURRENT_TIMESTAMP(),
+		CURRENT_TIMESTAMP(),
 		#{createUserId},
-		#{updateUserId}
+		#{createUserId}
 		)
 	</insert>
 	
 	<update id="saveUser" parameterType="com.maiqi.po.User">  
-        update t_user set  
-        userName=#{userName}, loginName=#{loginName}, userDesc=#{userDesc}, updateUserId=#{updateUserId} where userId=#{userId}  
+        update t_user 
+			<set>
+	        	<if test="userName !=null and userName !=''">
+	        		userName=#{userName},
+	        	</if>
+	        	<if test="loginName !=null and loginName !=''">
+	        		loginName=#{loginName},
+	        	</if>
+	        	<if test="userDesc !=null and userDesc !=''">
+	        		userDesc=#{userDesc},
+	        	</if>
+	        	proportion=#{proportion},
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set> 
+		where userId=#{userId}  
+    </update> 
+    
+    <update id="saveUserProportion" parameterType="com.maiqi.po.User">  
+        update t_user 
+			<set>
+	        	proportion=#{proportion},
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set> 
+		where userId=#{userId}  
     </update> 
 </mapper> 

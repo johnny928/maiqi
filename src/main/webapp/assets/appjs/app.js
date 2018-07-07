@@ -255,7 +255,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	    })
 	    
 	    .state('goodsEditer', {
-	        url: "/goods/goodsEditer",
+	        url: "/goods/goodsEditer/:goodsId",
 	        templateUrl: "views/goods/goodsEditer",
 	        data: {pageTitle: 'goodsEditer'},
 	//      controller: "GeneralPageController",
@@ -283,7 +283,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/scripts/datatable.js',
 	                        'assets/appjs/scripts/table-ajax.js',
 	                        
-	                        'assets/admin/pages/scripts/goodsEditer.js',
+//	                        'assets/admin/pages/scripts/goodsEditer.js',
 	                        'assets/appjs/controllers/GoodsEditController.js'
 	                    ]
 	                });
@@ -333,17 +333,20 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                    name: 'MetronicApp',
 	                    insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 	                    files: [
-	                        'assets/global/plugins/select2/select2.css',                             
-	                        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-	                        'assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css',
+							'assets/global/plugins/select2/select2.css',                             
+							'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css',
 							'assets/global/css/maiqi/maiqi.css',
-	                        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-	                        'assets/global/plugins/select2/select2.min.js',
-	                        'assets/global/plugins/datatables/all.min.js',
-	
-	                        'assets/global/scripts/datatable.js',
-	                        'assets/appjs/scripts/table-ajax.js',
-	                        'assets/admin/pages/scripts/clients.js',
+							'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+							'assets/global/plugins/select2/select2.min.js',
+							'assets/global/plugins/datatables/all.min.js',
+							'assets/global/plugins/jquery-tags-input/jquery.tagsinput.css',
+							
+							'assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js',	
+							'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
+							'assets/global/scripts/maiqi/maiqi.js',
+							'assets/global/scripts/datatable.js',
+							'assets/appjs/scripts/table-ajax.js',
 	
 	                        'assets/appjs/controllers/ClientController.js'
 	                    ]
@@ -353,7 +356,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	    })
 	    
 	    .state('clientEditer', {
-	        url: "/clients/clientEditer",
+	        url: "/clients/clientEditer/:clientId",
 	        templateUrl: "views/clients/clientEditer",
 	        data: {pageTitle: 'ClientEditer'},
 	//      controller: "GeneralPageController",

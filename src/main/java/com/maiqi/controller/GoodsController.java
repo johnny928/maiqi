@@ -19,6 +19,7 @@ import com.maiqi.component.DataTableResult;
 import com.maiqi.component.JsonResult;
 import com.maiqi.component.SessionManager;
 import com.maiqi.component.Utils;
+import com.maiqi.po.Goods;
 import com.maiqi.service.GoodsService;
 
 @Controller
@@ -100,4 +101,47 @@ public class GoodsController {
 		}		
 		return jresult;
 	}
+	
+	@RequestMapping(value={"/getGoodsById"})
+	@ResponseBody
+	public JsonResult getGoodsById(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			if(Utils.isEmpty(params) || Utils.isEmpty(params.get("goodsId"))){
+				throw new Exception("缺少参数！"); 
+			}
+			resM.put("goods", goodsService.getGoods((String)params.get("goodsId")));
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("获取数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/saveGoods"})
+	@ResponseBody
+	public JsonResult saveGoods(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			if(Utils.isEmpty(params) || Utils.isEmpty(params.get("goods"))){
+				throw new Exception("缺少参数！"); 
+			}
+			Goods g = new Goods();
+			Utils.populate(g, (Map<String, Object>) params.get("goods"));
+			resM.put("rows", goodsService.saveGoods(g));
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("保存数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
+	
 }

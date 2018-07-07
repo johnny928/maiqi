@@ -15,4 +15,6 @@ public interface ClientDao {
 	public int saveClient(Client client);
 	
 	public Client selectClientByPhoneNum(String phoneNum);
+	
+	public int selectClientsCnt(Map<String,Object> params);
 }

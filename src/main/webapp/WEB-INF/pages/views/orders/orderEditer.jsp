@@ -70,8 +70,8 @@
 											<div class="col-sm-4">
 												<div class="input-group">
 													<span class="input-group-addon">
-									<i class="fa fa-user"></i>
-									</span>
+														<i class="fa fa-user"></i>
+													</span>
 													<input type="text" class="form-control" ng-model="orderInfo.client.clientName"/>
 												</div>
 												<p class="help-block">

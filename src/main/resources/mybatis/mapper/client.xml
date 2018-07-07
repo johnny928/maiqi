@@ -17,6 +17,50 @@
 		<result column="createUserId" property="createUserId" />
 		<result column="updateUserId" property="updateUserId" />
 	</resultMap>
+	
+	<!--  分页后缀  -->
+	<sql id="pageSuffix">
+		<if test="rowStart!=null and rowStart!='' and pageSize!=null and pageSize!=''">
+			LIMIT ${rowStart},${pageSize}
+		</if>
+	</sql>
+	
+	
+		<!--  用户查询条件  -->
+	<sql id="clients_list_whereCls">
+		<where>
+			isValid = 1
+			<if test="clientName !=null and clientName !=''">
+				and clientName like '${clientName}%'
+			</if>
+			<if test="labels !=null and labels !=''">
+				<foreach collection="labels" item="label" open="and ("  
+	                close=")" separator="and">  
+	                find_in_set(#{label, jdbcType=VARCHAR},label) 
+	            </foreach>
+			</if>
+			<if test="phoneNum !=null and phoneNum !=''">
+				and phoneNum = #{phoneNum, jdbcType=VARCHAR}
+			</if>
+			<if test="sex !=null and sex !=''">
+				and sex = #{sex, jdbcType=VARCHAR}
+			</if>
+			<if test="level !=null and level !=''">
+				and level = #{level, jdbcType=INTEGER}
+			</if>
+			<if test="birthday !=null and birthday !=''">
+				and birthday = #{birthday, jdbcType=DATE}
+			</if>
+			<if test="createDateS !=null and createDateS !=''">
+				and createTime &gt;= str_to_date(#{createDateS, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="createDateE !=null and createDateE !=''">
+				and createTime &lt; DATE_ADD(str_to_date(#{createDateE, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),interval 1 day)
+			</if>
+		</where>
+	</sql>
+	
+	
 	<!-- 查询单条记录 -->
 	<select id="selectClientById" parameterType="java.lang.String" resultMap="Client">
 		SELECT * FROM t_client WHERE clientId = #{clientId} and isValid = 1
@@ -24,29 +68,18 @@
 	
 	<!-- 查询多条记录 -->
 	<select id="selectClients" parameterType="Map" resultMap="Client">
-		SELECT * FROM t_client where isValid = 1
-		<if test="clientName !=null and clientName !=''">
-			and clientName like '${clientName}%'
-		</if>
-		<if test="labels !=null and labels !=''">
-			<foreach collection="labels" item="label" open="and ("  
-                close=")" separator="and">  
-                find_in_set(#{label, jdbcType=VARCHAR},label) 
-            </foreach>
-		</if>
-		<if test="phoneNum !=null and phoneNum !=''">
-			and phoneNum = #{phoneNum, jdbcType=VARCHAR}
-		</if>
-		<if test="sex !=null and sex !=''">
-			and sex = #{sex, jdbcType=VARCHAR}
-		</if>
-		<if test="level !=null and level !=''">
-			and level = #{level, jdbcType=INTEGER}
-		</if>
-		<if test="birthday !=null and birthday !=''">
-			and birthday = #{birthday, jdbcType=DATE}
-		</if>
+		SELECT * FROM t_client 
+		<include refid="clients_list_whereCls"/>
+		order by createTime desc
+		<include refid="pageSuffix"/>
 	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectClientsCnt" parameterType="Map" resultType="int">
+		SELECT count(1) cnt FROM t_client t
+		<include refid="clients_list_whereCls"/>
+	</select>
+	
 	
 	<!-- 根据手机号获取客户 -->
 	<select id="selectClientByPhoneNum" parameterType="java.lang.String" resultMap="Client">
@@ -113,9 +146,7 @@
 	        	<if test="label !=null and label !=''">
 	        		label=#{label},
 	        	</if>
-	        	<if test="isValid !=null and isValid !=''">
-	        		isValid=#{isValid},
-	        	</if>
+	        	isValid=#{isValid},
 				updateTime=CURRENT_TIMESTAMP(),
 				updateUserId=#{updateUserId} ,
 			</set>

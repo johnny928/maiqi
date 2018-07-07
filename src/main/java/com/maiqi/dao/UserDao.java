@@ -18,4 +18,10 @@ public interface UserDao {
 	public int saveUser(User user);
 	
 	public List<Map<String,Object>> selectOperators();
+	
+	public List<Map<String,Object>> selectUsers();
+	
+	public int selectUsersCnt();
+	
+	public int saveUserProportion(User user);
 }

@@ -62,6 +62,7 @@ MetronicApp.controller('GoodsController', ['$rootScope', '$scope', 'settings','$
 	let initList = function(){
 		$scope.queryCond = $scope.queryCond || {};
 		if($.fn.DataTable.isDataTable("#goods-list")){
+			$log.log('here')
 			$scope.goodsList.getDataTable().ajax.reload();
 			return ;
 		}
@@ -133,8 +134,7 @@ MetronicApp.controller('GoodsController', ['$rootScope', '$scope', 'settings','$
 		$("#goods-list").on('init.dt draw.dt',function (e, settings, data){
 			handleConfirm();
 		});
-		
-		$('#searchBtn').on('click',function(e){
+		$('#searchBtn, #tools-reload').on('click',function(e){
 			e.preventDefault();
 			let label = $('.goods_label').val();
 			$scope.queryCond.labels = label ? label.split(',') : '';

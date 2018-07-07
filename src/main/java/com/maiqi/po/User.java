@@ -1,5 +1,6 @@
 package com.maiqi.po;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class User {
@@ -13,6 +14,7 @@ public class User {
 	private String createUserId;
 	private String updateUserId;
 	private String userDesc;
+	private BigDecimal proportion;
 	
 	public String getUserId() {
 		return userId;
@@ -73,5 +75,11 @@ public class User {
 	}
 	public void setIsAdmin(int isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+	public BigDecimal getProportion() {
+		return proportion;
+	}
+	public void setProportion(BigDecimal proportion) {
+		this.proportion = proportion;
 	}
 }

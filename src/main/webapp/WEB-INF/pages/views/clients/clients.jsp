@@ -14,7 +14,7 @@
 </div>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
-<div class="row">
+<div class="row" id="clientsPanel" ng-controller="ClientsController">
 	<div class="col-md-12">
 		<!-- Begin: life time stats -->
 		<div class="portlet">
@@ -25,12 +25,74 @@
 					<i class="fa fa-globe"></i>客户列表
 				</div>
 				<div class="tools">
-					<a href="javascript:;" class="reload">
+					<a href="javascript:;" class="maiqi-search-collapse">
+						<i class="fa fa-search"></i>
 					</a>
+					<a href="javascript:;" class="maiqi-reload" id="tools-reload"></a>
 				</div>
 			</div>
 			<div class="portlet-body">
-				<table class="table table-striped table-hover" id="clients_table">
+				<div class="maiqi-search-block">
+					<form id="searchForm" role="form">
+						<div class="row form-group">
+							<div class="col-md-6">
+								<label class="control-label">手机号：</label>
+								<div class="input-icon">
+									<i class="fa fa-phone"></i>
+									<input type="text" class="form-control" ng-model="queryCond.phoneNum" />
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="control-label">客户名：</label>
+								<div class="input-icon">
+									<i class="fa fa-user"></i>
+									<input type="text" class="form-control" ng-model="queryCond.clientName"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="control-label">分类：</label>
+								<div class="input-icon">
+									<input type="text" size="16" id="label" class="form-control tags client_label" />
+								</div>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-md-6">
+								<label class="control-label">创建日期（开始）：</label>
+								<div class="input-icon">
+									<i class="fa fa-calendar"></i>
+									<input type="text" readonly class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="queryCond._createDateS" is-open="createDateSOpened" 
+										datepicker-options="dateOptions" 
+										clear-text="清空"
+										close-text="关闭"
+										current-text="今天"
+										ng-required="true" close-text="Close" ng-click="open($event,'createDateSOpened')"/>
+						              
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="control-label">创建日期（结束）</label>
+								<div class="input-icon">
+									<i class="fa fa-calendar"></i>
+									<input type="text" readonly class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="queryCond._createDateE" is-open="createDateEOpened" 
+										datepicker-options="dateOptions" 
+										clear-text="清空"
+										close-text="关闭"
+										current-text="今天"
+										ng-required="true" close-text="Close" ng-click="open($event,'createDateEOpened')"/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-10 col-md-offset-1">
+								<button class="btn blue btn-block margin-top-10" id="searchBtn">搜索 <i class="m-icon-swapright m-icon-white"></i></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<table class="table table-striped table-hover" id="clients-list">
 					<thead>
 						<tr>
 							<th width="2%">
@@ -51,335 +113,14 @@
 							<th width="3%">
 								标签
 							</th>
+							<th width="3%">
+								创建时间
+							</th>
 							<th width="2%">
 								操作
 							</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>
-								Trident
-							</td>
-							<td>
-								Internet Explorer 4.0
-							</td>
-							<td>
-								Win 95+
-							</td>
-							<td>
-								4
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Trident
-							</td>
-							<td>
-								Internet Explorer 5.0
-							</td>
-							<td>
-								Win 95+
-							</td>
-							<td>
-								5
-							</td>
-							<td>
-								C
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								修改
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Trident
-							</td>
-							<td>
-								Internet Explorer 5.5
-							</td>
-							<td>
-								Win 95+
-							</td>
-							<td>
-								5.5
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Trident
-							</td>
-							<td>
-								Internet Explorer 6
-							</td>
-							<td>
-								Win 98+
-							</td>
-							<td>
-								6
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Trident
-							</td>
-							<td>
-								Internet Explorer 7
-							</td>
-							<td>
-								Win XP SP2+
-							</td>
-							<td>
-								7
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Trident
-							</td>
-							<td>
-								AOL browser (AOL desktop)
-							</td>
-							<td>
-								Win XP
-							</td>
-							<td>
-								6
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Firefox 1.0
-							</td>
-							<td>
-								Win 98+ / OSX.2+
-							</td>
-							<td>
-								1.7
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Firefox 1.5
-							</td>
-							<td>
-								Win 98+ / OSX.2+
-							</td>
-							<td>
-								1.8
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Firefox 2.0
-							</td>
-							<td>
-								Win 98+ / OSX.2+
-							</td>
-							<td>
-								1.8
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Firefox 3.0
-							</td>
-							<td>
-								Win 2k+ / OSX.3+
-							</td>
-							<td>
-								1.9
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Camino 1.0
-							</td>
-							<td>
-								OSX.2+
-							</td>
-							<td>
-								1.8
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Camino 1.5
-							</td>
-							<td>
-								OSX.3+
-							</td>
-							<td>
-								1.8
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Netscape 7.2
-							</td>
-							<td>
-								Win 95+ / Mac OS 8.6-9.2
-							</td>
-							<td>
-								1.7
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Gecko
-							</td>
-							<td>
-								Netscape Browser 8
-							</td>
-							<td>
-								Win 98SE+
-							</td>
-							<td>
-								1.7
-							</td>
-							<td>
-								A
-							</td>
-							<td>
-								X
-							</td>
-							<td>
-								X
-							</td>
-						</tr>
-					</tbody>
 				</table>
 			</div>
 		</div>
@@ -398,6 +139,6 @@
 </div>
 <!-- BEGIN MAIN JS -->
 <script>
-	ComponentsClients.init();
+	//ComponentsClients.init();
 </script>
 <!-- END MAIN JS -->

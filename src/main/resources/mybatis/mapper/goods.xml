@@ -58,7 +58,7 @@
 	<select id="selectGoods" parameterType="Map" resultMap="Goods">
 		SELECT * FROM t_goods t
 		<include refid="goods_list_whereCls"/>
-		order by goodsName desc
+		order by createTime desc
 		<include refid="pageSuffix"/>
 	</select>
 	

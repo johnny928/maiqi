@@ -119,12 +119,12 @@
 
 <div class="mq-hover-block bottom-right" >
 	<div>
-		<a href="#/goods/goodsEditer" class="btn btn-circle btn-danger btn-block btn-lg m-icon-big" >
+		<a href="#/goods/goodsEditer/" class="btn btn-circle btn-danger btn-block btn-lg m-icon-big" >
 			<span class="glyphicon glyphicon-tag"></span> 新增商品 </a>
 	</div>
 </div>
 <!-- BEGIN MAIN JS -->
 <script>
-	ComponentsGoods.init();
+	//ComponentsGoods.init();
 </script>
 <!-- END MAIN JS -->
