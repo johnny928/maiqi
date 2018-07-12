@@ -146,6 +146,7 @@ public class OrderController {
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
 		}		
@@ -302,6 +303,23 @@ public class OrderController {
 		Map resM = new HashMap();
 		try{
 			resM.put("cancelRows", orderService.cancelOrderDetail(params));
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("保存数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/createOrder"})
+	@ResponseBody
+	public JsonResult createOrder(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			resM.put("order", orderService.newOrder());
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){

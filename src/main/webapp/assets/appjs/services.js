@@ -21,7 +21,7 @@ MetronicApp.service('maiqi', ['$http','$q',
                         closeInSeconds: 5, 
                         place: 'prepend'
                     });
-	        		deferred1.reject(options.errMsg||'请求失败！');
+	        		deferred.reject(options.errMsg||'请求失败！');
 	        	}
 	        	deferred.resolve(response);
 	        },function(){
@@ -33,7 +33,7 @@ MetronicApp.service('maiqi', ['$http','$q',
                     closeInSeconds: 5,
                     place: 'prepend'
                 });
-	        	deferred1.reject(options.errMsg||'请求失败！');
+	        	deferred.reject(options.errMsg||'请求失败！');
 	        })
 			return deferred.promise;
 				

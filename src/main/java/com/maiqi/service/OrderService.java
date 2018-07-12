@@ -63,11 +63,20 @@ public class OrderService {
 		return orderDao.getOrderNumber();
 	}
 	
+	public Order newOrder(){
+		Order order = new Order();
+		order.setCreateUserId(sessionManager.getAuthor().getUserId());
+		order.setSalespersonId(sessionManager.getAuthor().getUserId());
+		order.setOrderNumber(orderDao.getOrderNumber());
+		orderDao.createOrder(order);
+		return order;
+	}
+	
 	public Map getOrderInfo(String orderId){
 		Map resM = new HashMap();
 		Order order = orderDao.selectOrderById(orderId); 
-		Client client = clientDao.selectClientById(order.getClientId());
-		logger.debug(String.format("client birthday:%s[long=%s]", client.getBirthday().toLocaleString(),client.getBirthday().getTime()));
+		Client client = Utils.isEmpty(order.getClientId()) ? null : clientDao.selectClientById(order.getClientId());
+//		logger.debug(String.format("client birthday:%s[long=%s]", client.getBirthday().toLocaleString(),client.getBirthday().getTime()));
 		resM.put("client", client);
 		resM.put("order", order);
 		return resM;

@@ -1,11 +1,16 @@
 
 /* Setup general page controller */
-MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', 'settings', '$log', '$compile', '$document', '$state',
-	function($rootScope, $scope, $uibModal, settings,  $log, $compile, $document, $state) {
+MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', 'settings', '$log', '$compile', '$document', '$state', 'maiqi',
+	function($rootScope, $scope, $uibModal, settings,  $log, $compile, $document, $state, maiqi) {
 	
 	var _date = new Date();
 	var _dateE = new Date();
 	_dateE.setDate(_dateE.getDate() + 1);
+	
+	if (jQuery().datepicker && MaiQi) {
+		MaiQi.init();
+		$('.portlet a.maiqi-search-collapse').trigger('click');
+    }
 	
 	$scope.queryCond = {
 		orderTimeS: _date.toISOString().substr(0,10),
@@ -38,6 +43,26 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
     
     $scope.orderEdit = function(_orderId){
     	$state.go('orderEditer',{orderId: _orderId})
+    };
+    
+    $scope.newOrder = function(){
+    	Metronic.blockUI({
+            target: "#orderPanel",
+            animate: true,
+            overlayColor: 'none'
+        });
+		
+		maiqi.post({url:'views/orders/createOrder',data:{},errMsg:'保存出错！',container:'#orderPanel'})
+			.then(function(response) {
+	        	let res = response.data;
+	        	if(res.isSuccess && res.data && res.data.order && res.data.order.orderId){
+	        		Metronic.unblockUI("#orderPanel");
+	        		$state.go('orderEditer',{orderId: res.data.order.orderId});
+	        	}		        	
+	        })
+	        .finally(function(){
+	        	Metronic.unblockUI("#orderPanel");
+	        });
     };
 	
 	var initTable = function () {

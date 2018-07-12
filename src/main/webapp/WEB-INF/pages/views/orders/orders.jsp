@@ -14,7 +14,8 @@
 </div>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
-<div class="row" ng-controller="OrderModalCtrl">
+<div ng-controller="OrderModalCtrl">
+<div class="row"  id="orderPanel">
 	<div class="col-md-12">
 		<!-- Begin: life time stats -->
 		<div class="portlet box green-haze">
@@ -106,11 +107,11 @@
 
 <div class="mq-hover-block bottom-right" >
 	<div>
-		<a href="#/orders/orderEditer/" class="btn btn-circle btn-danger btn-block btn-lg m-icon-big" >
+		<a href="#" class="btn btn-circle btn-danger btn-block btn-lg m-icon-big" ng-click="newOrder()">
 			<span class="glyphicon glyphicon-tag"></span> 新增订单 </a>
 	</div>
 </div>
-
+</div>
 <script type="text/ng-template" id="myModalContent.html">
 	<div class="modal-header">
 		<h4 class="modal-title">订单号：{{orderNumber}}</h4>
@@ -148,6 +149,6 @@
 
 <!-- BEGIN MAIN JS -->
 <script>
-	ComponentsOrders.init();
+	//ComponentsOrders.init();
 </script>
 <!-- END MAIN JS -->

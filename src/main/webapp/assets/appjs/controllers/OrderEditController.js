@@ -386,7 +386,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		};
 		
 		let getOrderData = function(){
-			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected.userId;
+			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected && $scope.salesperson.selected.userId;
 		};
 		
 		$scope.saveGoods = function(_tab,_row){
