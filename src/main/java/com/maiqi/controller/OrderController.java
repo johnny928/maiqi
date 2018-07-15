@@ -332,4 +332,19 @@ public class OrderController {
 		return jresult;
 	}
 	
+	@RequestMapping(value={"/getTodaySales"})
+	@ResponseBody
+	public JsonResult getTodaySales(){
+		JsonResult jresult = new JsonResult();
+		try{
+			jresult.setData(orderService.getTodaySales());
+			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("获取数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
+	
 }

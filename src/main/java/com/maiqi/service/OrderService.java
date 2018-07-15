@@ -172,4 +172,12 @@ public class OrderService {
 		}
 		return orderDetailDao.cancelGoods(params);
 	}
+	
+	public Map getTodaySales(){
+		Map resM = null;
+		Map params = new HashMap();
+		params.put("userId", sessionManager.getAuthor().getUserId());
+		resM = orderDao.getTodaySales(params);
+		return resM;
+	}
 }

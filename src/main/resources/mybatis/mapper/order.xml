@@ -85,6 +85,17 @@
 		<!-- select CONCAT(date_format(NOW(),'%Y%m%d'),'-',right(ROUND(RAND(),6),6)) -->
 		select CONCAT(date_format(NOW(), '%y%m%d'),floor(date_format(NOW(3), '%H%i%s%f')/1000))
 	</select>
+	
+	<select id="getTodaySales" parameterType="Map" resultType="int">
+		select SUM(ifnull(d.quantity,0)) quantity,SUM(ifnull(d.totalPrice,0)) sale,
+			SUM( CASE when o.salespersonId=#{userId} then ifnull(d.quantity,0) else 0 END) myQuantity,
+			SUM( CASE when o.salespersonId=#{userId} then ifnull(d.totalPrice,0) else 0 END) mySale 
+		from t_order o,t_orderdetails d 
+		where o.orderId = d.orderId 
+			and o.orderTime>= str_to_date( date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s')
+			and o.orderTime< DATE_ADD( str_to_date(date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s'),interval 1 day )
+	</select>
+	
 
 	<!-- 插入语句 -->
 	<insert id="createOrder" parameterType="com.maiqi.po.Order" >
