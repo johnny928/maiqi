@@ -46,6 +46,7 @@ public class GoodsService {
 		}
 		int retInt = 0;
 		if(Utils.isEmpty(goods.getGoodsId())){
+			goods.setIsValid(1);
 			goods.setCreateUserId(sessionManager.getAuthor().getUserId());
 			retInt = goodsDao.createGoods(goods);
 		}else{

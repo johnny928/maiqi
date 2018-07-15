@@ -243,6 +243,8 @@ public class OrderController {
 			Utils.populate(client,(Map)params.get("client"));
 			Utils.populate(order,(Map)params.get("order"));
 			orderService.saveOrderInfo(order, client);
+			resM.put("client", client);
+			resM.put("order", order);
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){

@@ -68,6 +68,7 @@ public class OrderService {
 		order.setCreateUserId(sessionManager.getAuthor().getUserId());
 		order.setSalespersonId(sessionManager.getAuthor().getUserId());
 		order.setOrderNumber(orderDao.getOrderNumber());
+		order.setIsValid(1);
 		orderDao.createOrder(order);
 		return order;
 	}
@@ -103,6 +104,7 @@ public class OrderService {
 			return 0;
 		}
 		if(Utils.isEmpty(order.getOrderId())){
+			order.setIsValid(1);
 			return orderDao.createOrder(order);
 		}else{
 			return orderDao.saveOrder(order);
@@ -143,6 +145,7 @@ public class OrderService {
 					.multiply(orderDetail.getDiscount()
 							.divide(new BigDecimal(10)))
 							,2));
+			orderDetail.setIsValid(1);
 			orderDetailDao.createOrderDetail(orderDetail);
 		}else{
 			orderDetail.setQuantity(quantity);

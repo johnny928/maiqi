@@ -392,6 +392,29 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        }
 	    })
     
+	    .state('dashboard', {
+	        url: "/dashboard",
+	        templateUrl: "views/dashboard/dashboard",
+	        data: {pageTitle: 'ClientEditer'},
+	//      controller: "GeneralPageController",
+	        resolve: {
+	            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                return $ocLazyLoad.load({
+	                    name: 'MetronicApp',
+	                    insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                    files: [
+							'assets/admin/pages/css/tasks.css',
+							
+							'assets/global/plugins/morris/raphael-min.js',
+							'assets/global/plugins/jquery.sparkline.min.js',
+							
+							'assets/admin/pages/scripts/tasks.js',
+	                        'assets/appjs/controllers/DashboardController.js'
+	                    ]
+	                });
+	            }]
+	        }
+	    })
         // User Profile
         .state("profile", {
             url: "/profile",

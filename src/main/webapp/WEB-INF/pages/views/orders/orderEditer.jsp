@@ -202,9 +202,9 @@
 												<th class="text-nowrap">
 													<i class="fa fa-comment"></i> 描述
 												</th>
-												<th class="text-nowrap">
+												<!-- <th class="text-nowrap">
 													<i class="fa fa-file"></i> 数量
-												</th>
+												</th> -->
 												<th>
 												</th>
 											</tr>

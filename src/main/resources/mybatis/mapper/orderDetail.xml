@@ -44,7 +44,7 @@
 			quantity, discount, totalPrice 
 			from t_orderdetails t 
 		where orderId = #{orderId} and isValid = 1
-		order by quantity desc,goodsName desc
+		order by createTime desc
 		<include refid="pageSuffix"/>
 	</select>
 	

@@ -11,26 +11,32 @@
 		
 		<li class="start">
 			<a href="#/orders">
-			<i class="icon-home"></i>
+			<i class="icon-basket"></i>
 			<span class="title">订单管理</span>
 			</a>
 		</li>
 		<li class="start">
 			<a href="#/goods">
-			<i class="icon-home"></i>
+			<i class="icon-handbag"></i>
 			<span class="title">商品管理</span>
 			</a>
 		</li>
 		<li class="start">
 			<a href="#/proportion">
-			<i class="icon-home"></i>
+			<i class="icon-diamond"></i>
 			<span class="title">分成管理</span>
 			</a>
 		</li>
 		<li class="start">
 			<a href="#/clients">
-			<i class="icon-home"></i>
+			<i class="icon-user"></i>
 			<span class="title">客户管理</span>
+			</a>
+		</li>
+		<li class="start">
+			<a href="#/dashboard">
+			<i class="icon-bar-chart"></i>
+			<span class="title">销售情况</span>
 			</a>
 		</li>
 	</ul>

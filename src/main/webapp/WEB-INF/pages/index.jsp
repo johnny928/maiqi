@@ -32,6 +32,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<link href="assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
+
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-toastr/toastr.min.css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
 
 <!-- BEGIN DYMANICLY LOADED CSS FILES(all plugin and page related styles must be loaded between GLOBAL and THEME css files ) -->
@@ -130,6 +133,12 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>	
 	<script src="assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+	
+	<script src="assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/echarts/echarts.min.js" type="text/javascript"></script>
+	
+	<script src="assets/global/plugins/bootstrap-toastr/toastr.min.js"></script>
 	<!-- END CORE JQUERY PLUGINS -->
 
 	<!-- BEGIN CORE ANGULARJS PLUGINS -->

@@ -33,8 +33,10 @@ public class ClientService {
 		}
 		if(Utils.isEmpty(client.getClientId())){
 			client.setCreateUserId(sessionManager.getAuthor().getUserId());
+			client.setIsValid(1);
 			return clientDao.createClient(client);
 		}else{
+			client.setUpdateUserId(sessionManager.getAuthor().getUserId());
 			return clientDao.saveClient(client);
 		}
 	}

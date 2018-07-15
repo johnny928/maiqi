@@ -72,7 +72,7 @@
 			(select t_user.userName from t_user where t_user.userId = t.salespersonId) salesperson  
 		FROM t_Order t
 			<include refid="order_list_whereCls"/>
-			order by orderNumber desc
+			order by createTime desc
 			<include refid="pageSuffix"/>
 	</select>
 	

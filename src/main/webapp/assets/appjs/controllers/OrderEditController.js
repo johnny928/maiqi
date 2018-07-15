@@ -2,6 +2,22 @@
 MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$modal', '$log', 
                                          '$state', '$stateParams','$http', '$filter','$compile','maiqi','$q',
 	function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http, $filter, $compile, maiqi,$q) {
+	
+		toastr.options = {
+		  "closeButton": true,
+		  "debug": false,
+		  "positionClass": "toast-top-right",
+		  "onclick": null,
+		  "showDuration": "500",
+		  "hideDuration": "3000",
+		  "timeOut": "3000",
+		  "extendedTimeOut": "3000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut"
+		};
+	
 		$scope.tabClick = function(tabName){
 			$(tabName).addClass('active in');
 		}
@@ -78,41 +94,23 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 	                    },
 	                    {	
 	                    	"data": null
-	                    },
-	                    {	
-	                    	"data": null
 	                    }
 	                ],
 	               "columnDefs": [
 		               {
 		            	   'defaultContent':'',
-		            	   'targets': [0,1,2,3,4,5]
+		            	   'targets': [0,1,2,3,4]
 		               },
 		               {
 		            	   'targets': [4],
 		                	"createdCell": function(td, cellData, rowData, row, col){
-		                		let eles = ['<div class="input-inline input-medium ">',
-		                		          	'<input type="text" value="'+(rowData.quantity||'0')+'" name="demo1" class="form-control maiqi-spin-quantity" maxlength="6">',
-		                		          '</div>'];
-		                		let html = eles.join('\n');
-		                		$(td).append($compile(html)($scope));
-		                	}
-		               },
-		               {
-		            	   'targets': [5],
-		                	"createdCell": function(td, cellData, rowData, row, col){
 		                		let eles ;
-		                		if(rowData.cnt == 0){
-		                			eles = ['<div>',
-			                		            '<button class="btn btn-xs purple" ng-click="saveGoods(\'tab2\',\''+row+'\')">添加商品 </button>',
-			                		            '<p></p>',
-		                		            '</div>'];
-		                		}else{
-		                			eles = ['<div><button class="btn btn-xs btn-success" ng-click="saveGoods(\'tab2\',\''+row+'\')">保存修改 </button>',
-			                		            '<p></p>',
-			                		            '<button class="btn btn-xs green-stripe cancel-goods" data-toggle="confirmation" data-placement="top" data-tab-num="tab2" data-goodsId="'+rowData.goodsId+'">取消选择</button>',
-			            		            '</div>'];
-		                		}      
+		                		let addBtnClass = rowData.cnt>0 ? "hidden" : "";
+		                		let cancelBtnClass = rowData.cnt>0 ? "" : "hidden";
+	                			eles = ['<div>',
+		                		            '<button class="btn btn-xs purple add-goods '+addBtnClass+'" ng-click="addGoods(\'tab2\',\''+row+'\')">添加商品 </button>',
+		                		            '<button class="btn btn-xs green-stripe cancel-goods '+cancelBtnClass+'" data-toggle="confirmation" data-placement="top" data-tab-num="tab2" data-row-num="'+row+'" data-goodsId="'+rowData.goodsId+'">取消选择</button>',
+	                		            '</div>'];
 		                		let html = eles.join('\n');
 		                		$(td).append($compile(html)($scope));
 		                	}
@@ -204,7 +202,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		            	   'targets': [4],
 		                	"createdCell": function(td, cellData, rowData, row, col){
 		                		let eles = ['<div class="input-inline input-medium ">',
-		                		          	'<input type="text" value="'+(rowData.quantity||'0')+'" name="demo1" class="form-control maiqi-spin-quantity maiqi-goods-list-edit" maxlength="6">',
+		                		          	'<input type="text" value="'+(rowData.quantity||'0')+'" name="demo1" class="form-control maiqi-spin-quantity maiqi-goods-list-edit" maxlength="6" data-tab-num="tab3" data-row-num="'+row+'">',
 		                		          '</div>'];
 		                		let html = eles.join('\n');
 		                		$(td).append($compile(html)($scope));
@@ -214,7 +212,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		            	   'targets': [5],
 		                	"createdCell": function(td, cellData, rowData, row, col){
 		                		let eles = ['<div class="input-inline input-medium ">',
-		                		            '<input type="text" value="'+(rowData.discount||'0')+'" name="demo1" class="form-control maiqi-spin-discount maiqi-goods-list-edit" maxlength="3">',
+		                		            '<input type="text" value="'+(rowData.discount||'0')+'" name="demo1" class="form-control maiqi-spin-discount maiqi-goods-list-edit" maxlength="3" data-tab-num="tab3" data-row-num="'+row+'">',
 		                		          '</div>'];
 		                		let html = eles.join('\n');
 		                		$(td).append($compile(html)($scope));
@@ -223,9 +221,8 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		               {
 		            	   'targets': [7],
 		                	"createdCell": function(td, cellData, rowData, row, col){
-		                		let eles = ['<div><button class="btn btn-xs btn-success" ng-click="saveGoods(\'tab3\',\''+row+'\')">保存修改 </button>',
-		                		            '<p></p>',
-		                		            '<button class="btn btn-xs green-stripe cancel-goods" data-toggle="confirmation" data-placement="top" data-tab-num="tab3" data-goodsId="'+rowData.goodsId+'">取消选择</button>',
+		                		let eles = ['<div>',
+		                		            '<button class="btn btn-xs green-stripe del-goods" data-toggle="confirmation" data-placement="top" data-tab-num="tab3" data-row-num="'+row+'" data-goodsId="'+rowData.goodsId+'">取消选择</button>',
 		            		            '</div>'];
 		                		let html = eles.join('\n');
 		                		$(td).append($compile(html)($scope));
@@ -282,34 +279,20 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		        	}
 		        })
 		        .then(function(_res){
-		        	if(orderId){
-						//修改
-		        		maiqi.post({url:'views/orders/getOrderInfo',data:{orderId:orderId},errMsg:'获取订单数据失败！',container:'#orderEditPanel'})
-		        			.then(function(response) {
-					        	let res = response.data;
-					        	$log.log(res);
-					        	if(res.isSuccess){
-					        		$scope.orderInfo = res.data.orderInfo;
-					        		$scope.orderNumber = res.data.orderInfo.order.orderNumber;
-					        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
-					        		initTags($scope.orderInfo);
-					        	}
-					        })
-					        .then(function(){
-					        	initOperator();
-					        })
-					}else{
-						//新增
-						maiqi.post({url:'views/orders/getOrderNumber',errMsg:'获取订单号失败！',container:'#orderEditPanel'})
-							.then(function(response) {
-					        	let res = response.data;
-					        	if(res.isSuccess){
-					        		$scope.orderNumber = res.data.orderNumber;
-					        	}
-					        }).then(function(){
-					        	initOperator();
-					        });
-					}
+	        		maiqi.post({url:'views/orders/getOrderInfo',data:{orderId:orderId},errMsg:'获取订单数据失败！',container:'#orderEditPanel'})
+	        			.then(function(response) {
+				        	let res = response.data;
+				        	$log.log(res);
+				        	if(res.isSuccess){
+				        		$scope.orderInfo = res.data.orderInfo;
+				        		$scope.orderNumber = res.data.orderInfo.order.orderNumber;
+				        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
+				        		initTags($scope.orderInfo);
+				        	}
+				        })
+				        .then(function(){
+				        	initOperator();
+				        })
 		        })
 		        .finally(function(){
 		        	Metronic.unblockUI("#orderEditPanel");
@@ -357,11 +340,17 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 	    };
 	    
 	    let handleTotalPrice = function(){
+	    	let that = this;
 	    	$('.form-control.maiqi-spin-quantity, .form-control.maiqi-spin-discount').on('change',function(){
 	    		let org = math.number($(this).closest('tr').find('.maiqi-org-price').text());
 	    		let quantity = math.number($(this).closest('tr').find('.maiqi-spin-quantity').val());
 	    		let discount = math.number($(this).closest('tr').find('.maiqi-spin-discount').val());
 	    		$(this).closest('tr').find('.maiqi-total-price').text(math.chain(org).multiply(quantity).multiply(math.divide(discount,10)).round(2).done());
+	    		let tab = $(this).attr('data-tab-num');
+	    		let row = $(this).attr('data-row-num');
+	    		let rowObj = $scope[tab].goodsList.getDataTable().row(row);
+	    		let _goods = rowObj.data();
+	    		maiqi.debounce(_goods.goodsId,$scope.saveGoods,1000,false).apply(that,[tab,row]);
 	    	});
 	    };
 	    
@@ -371,11 +360,26 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				btnOkLabel: '确认',
 				btnCancelLabel: '取消',
 				onConfirm: function(event,el){
+					event.preventDefault();
 					let goodsId = el.attr('data-goodsid');
 					let tab = el.attr('data-tab-num');
-					$scope.cancelGoods(tab,goodsId);
+					let row = el.attr('data-row-num');
+					$scope.cancelGoods(tab,goodsId,row);
 				}
-			})
+			});
+			
+			$('.del-goods').confirmation({
+				title: '确认从已购列表中剔除此项商品？',
+				btnOkLabel: '确认',
+				btnCancelLabel: '取消',
+				onConfirm: function(event,el){
+					event.preventDefault();
+					let goodsId = el.attr('data-goodsid');
+					let tab = el.attr('data-tab-num');
+					let row = el.attr('data-row-num');
+					$scope.delGoods(tab,goodsId,row);
+				}
+			});
 	    };
 		
 		let getClientData = function(){
@@ -387,6 +391,32 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		
 		let getOrderData = function(){
 			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected && $scope.salesperson.selected.userId;
+		};
+		
+		$scope.addGoods = function(_tab,_row){
+			let rowObj = $scope[_tab].goodsList.getDataTable().row(_row);
+			let _goods = rowObj.data();
+			
+			Metronic.blockUI({
+                target: "#orderEditPanel",
+                animate: true,
+                overlayColor: 'none'
+            });
+			$log.log({orderId:orderId, goods:_goods, quantity: '1'});
+			
+			maiqi.post({url:'views/orders/saveOrderDetail',
+				data:{orderId:orderId, goods:_goods, quantity: '1'},
+				errMsg:'保存出错！',container:'#orderEditPanel'})
+				.then(function(response){
+		        	let res = response.data;
+		        	if(res.isSuccess){
+		        		rowObj.nodes().to$().find('.add-goods').addClass('hidden');
+		        		rowObj.nodes().to$().find('.cancel-goods').removeClass('hidden');
+		        	}	        
+				})
+				.finally(function(){
+					Metronic.unblockUI("#orderEditPanel");
+				})
 		};
 		
 		$scope.saveGoods = function(_tab,_row){
@@ -408,18 +438,12 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				.then(function(response){
 		        	let res = response.data;
 		        	if(res.isSuccess){
-		        		if($scope[_tab] && $scope[_tab].goodsList){
-		        			$scope[_tab].goodsList.getDataTable().ajax.reload();
-		        		}
+//		        		if($scope[_tab] && $scope[_tab].goodsList){
+//		        			$scope[_tab].goodsList.getDataTable().ajax.reload();
+//		        		}
 		        		Metronic.unblockUI("#orderEditPanel");
-			        	Metronic.alert({
-		                    type: 'success',
-		                    icon: 'check',
-		                    message: '保存成功！',
-		                    container: '#orderEditPanel',
-		                    closeInSeconds: 3, 
-		                    place: 'prepend'
-		                });
+		        		toastr.clear();
+		        		toastr.success('保存成功');
 		        	}	        
 				})
 				.finally(function(){
@@ -427,7 +451,29 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				})
 		};
 		
-		$scope.cancelGoods = function(_tab,_goodsId){
+		$scope.cancelGoods = function(_tab,_goodsId,_row){
+			let rowObj = $scope[_tab].goodsList.getDataTable().row(_row);
+			Metronic.blockUI({
+                target: "#orderEditPanel",
+                animate: true,
+                overlayColor: 'none'
+            });
+			
+			maiqi.post({url:'views/orders/cancelGoods',data:{orderId:orderId,goodsId:_goodsId},errMsg:'保存出错！',container:'#orderEditPanel'})
+				.then(function(response) {
+		        	let res = response.data;
+		        	if(res.isSuccess){
+		        		rowObj.nodes().to$().find('.add-goods').removeClass('hidden');
+		        		rowObj.nodes().to$().find('.cancel-goods').addClass('hidden');
+		        	}		        	
+		        })
+		        .finally(function(){
+		        	Metronic.unblockUI("#orderEditPanel");
+		        });
+		};
+		
+		$scope.delGoods = function(_tab,_goodsId,_row){
+			let rowObj = $scope[_tab].goodsList.getDataTable().row(_row);
 			Metronic.blockUI({
                 target: "#orderEditPanel",
                 animate: true,
@@ -441,7 +487,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		        		if($scope[_tab] && $scope[_tab].goodsList){
 		        			$scope[_tab].goodsList.getDataTable().ajax.reload();
 		        		}
-			        	Metronic.alert({
+		        		Metronic.alert({
 		                    type: 'success',
 		                    icon: 'check',
 		                    message: '保存成功！',
@@ -468,6 +514,10 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 			
 			maiqi.post({url:'views/orders/saveOrderInfo',data:{client:$scope.orderInfo.client,order:$scope.orderInfo.order},errMsg:'保存出错！',container:'#orderEditPanel'})
 				.then(function(response) {
+					console.log(response);
+					let res = response.data;
+					Object.assign($scope.orderInfo.client,res.data.client);
+					Object.assign($scope.orderInfo.order,res.data.order);
 		        	Metronic.alert({
 	                    type: 'success',
 	                    icon: 'check',
@@ -519,14 +569,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 			        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
 			        		initTags($scope.orderInfo);
 			        	}
-			        	Metronic.alert({
-		                    type: 'success',
-		                    icon: 'check',
-		                    message: msg,
-		                    container: '#orderEditPanel',
-		                    closeInSeconds: 5, 
-		                    place: 'prepend'
-		                });
+			        	toastr.success(msg);
 			        })
 			        .finally(function(){
 			        	Metronic.unblockUI("#tab_1");
