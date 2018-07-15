@@ -1,6 +1,7 @@
 /* Setup general page controller */
-MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$modal', '$log', 'maiqi', '$stateParams', '$state',
+MetronicApp.controller('GoodsEditController', ['$rootScope', '$scope', 'settings','$modal', '$log', 'maiqi', '$stateParams', '$state',
 	function($rootScope, $scope, settings, $modal, $log, maiqi, $stateParams, $state ) {
+	
 	let goodsId = $stateParams.goodsId;
 		
 	let initTags = function(_goods){

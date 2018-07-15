@@ -89,9 +89,10 @@ public class ClientsController {
 		Map resM = new HashMap();
 		try{
 			if(Utils.isEmpty(params) || Utils.isEmpty(params.get("clientId"))){
-				throw new Exception("缺少参数！"); 
+				resM.put("client", null);
+			}else{
+				resM.put("client", clientService.getClientById((String)params.get("clientId")));
 			}
-			resM.put("client", clientService.getClientById((String)params.get("clientId")));
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
@@ -113,7 +114,8 @@ public class ClientsController {
 			}
 			Client c = new Client();
 			Utils.populate(c, (Map<String, Object>) params.get("client"));
-			resM.put("rows", clientService.saveClient(c));
+			clientService.saveClient(c);
+			resM.put("client", c);
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){

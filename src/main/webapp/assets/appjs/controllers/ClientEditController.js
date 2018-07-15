@@ -90,6 +90,8 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 		
 		maiqi.post({url:'views/clients/saveClient',data:{client:$scope.client},errMsg:'保存出错！',container:'#clientEditPanel'})
 			.then(function(response) {
+				let res = response.data;
+				Object.assign($scope.client,res.data.client);
 	        	Metronic.alert({
                     type: 'success',
                     icon: 'check',

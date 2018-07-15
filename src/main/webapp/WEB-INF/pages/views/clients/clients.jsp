@@ -133,7 +133,7 @@
 
 <div class="mq-hover-block bottom-right" >
 	<div>
-		<a href="#/clients/clientEditer" class="btn btn-circle btn-danger btn-block btn-lg m-icon-big" >
+		<a href="#/clients/clientEditer/" class="btn btn-circle btn-danger btn-block btn-lg m-icon-big" >
 			<span class="glyphicon glyphicon-tag"></span> 客户登记 </a>
 	</div>
 </div>

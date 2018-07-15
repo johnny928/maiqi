@@ -16,7 +16,7 @@
 </div>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
-<div class="row" ng-controller="OrderEditCtrl" id="goodsPanel">
+<div class="row" ng-controller="GoodsEditController" id="goodsPanel">
 	<div class="col-md-12">
 		<!-- Begin: life time stats -->
 		<div class="portlet" >
