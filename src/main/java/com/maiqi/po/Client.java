@@ -18,6 +18,7 @@ public class Client {
 	private String createUserId;
 	private String updateUserId;
 	private int isValid;
+	private String clientSource;
 	
 	public String getClientId() {
 		return clientId;
@@ -92,5 +93,11 @@ public class Client {
 	}
 	public void setIsValid(int isValid) {
 		this.isValid = isValid;
+	}
+	public String getClientSource() {
+		return clientSource;
+	}
+	public void setClientSource(String clientSource) {
+		this.clientSource = clientSource;
 	}
 }

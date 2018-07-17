@@ -114,6 +114,9 @@
 								标签
 							</th>
 							<th width="3%">
+								客户来源
+							</th>
+							<th width="3%">
 								创建时间
 							</th>
 							<th width="2%">

@@ -141,6 +141,24 @@
 								</p>
 							</div>
 						</div>
+						<div class="form-group ">
+							<label class="control-label col-md-3">客户来源</label>
+							<div class="col-sm-6">
+								<div class="input-group">
+									<span class="input-group-addon">
+									<i class="fa fa-group"></i>
+									</span>
+									<ui-select ng-model="clientSource.selected" theme="bootstrap">
+							            <ui-select-match placeholder="请选择该客户的来源..." >{{$select.selected.userName}}</ui-select-match>
+							            <ui-select-choices repeat="person in operators | filter: $select.search">
+							              <div ng-bind-html="person.userName | highlight: $select.search"></div>
+							              <small ng-bind-html="'登录名：'+person.loginName | highlight: $select.search"></small>
+							            </ui-select-choices>
+							        </ui-select>
+									
+								</div>
+							</div>
+						</div>
 						<!-- <div class="form-actions">
 							<div class="row">
 								<div class="col-md-offset-3 col-md-3">

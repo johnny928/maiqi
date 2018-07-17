@@ -15,6 +15,7 @@
 		<result column="isValid" property="isValid" />
 		<result column="updateTime" property="updateTime" />
 		<result column="orderNumber" property="orderNumber" />
+		<result column="clientSource" property="clientSource" />
 	</resultMap>
 	
 	<!--  分页后缀  -->
@@ -43,6 +44,9 @@
 			<if test="salespersonId !=null and salespersonId !=''">
 				and t.salespersonId = #{salespersonId, jdbcType=VARCHAR}
 			</if>
+			<if test="clientSource !=null and clientSource !=''">
+				and t.clientSource = #{clientSource, jdbcType=VARCHAR}
+			</if>
 		</where>
 	</sql>
 
@@ -64,15 +68,18 @@
 	</select>
 	
 	<select id="selectOrders4V" parameterType="Map" resultType="java.util.Map">
-		SELECT t.orderId,
-			t.orderNumber, 
-			(select client.clientName from t_client client where client.clientId = t.clientId ) clientName,
-			t.totalPrice,
-			(select count(1) from t_orderdetails detail where detail.orderId = t.orderId and isValid=1) goodsCnt,
-			(select t_user.userName from t_user where t_user.userId = t.salespersonId) salesperson  
-		FROM t_Order t
+			select 
+					t.orderId,
+					t.orderNumber,
+					(select client.clientName from t_client client where client.clientId = t.clientId ) clientName,
+					SUM(ifnull(d.totalPrice,0)) totalPrice,
+					count(case when d.isValid=1 then 1 else null end) goodsCnt,
+					(select t_user.userName from t_user where t_user.userId = t.salespersonId) salesperson ,
+					(select t_user.userName from t_user where t_user.userId = t.clientSource ) clientSource 
+			from t_order t left join t_orderdetails d on t.orderId = d.orderId 
 			<include refid="order_list_whereCls"/>
-			order by createTime desc
+			group by t.orderId,t.orderNumber,t.clientSource
+			order by t.createTime desc
 			<include refid="pageSuffix"/>
 	</select>
 	
@@ -92,8 +99,8 @@
 			SUM( CASE when o.salespersonId=#{userId} then ifnull(d.totalPrice,0) else 0 END) mySale 
 		from t_order o,t_orderdetails d 
 		where o.orderId = d.orderId 
-			and o.orderTime>= str_to_date( date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s')
-			and o.orderTime< DATE_ADD( str_to_date(date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s'),interval 1 day )
+			and o.orderTime &gt;= str_to_date( date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s')
+			and o.orderTime &lt; DATE_ADD( str_to_date(date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s'),interval 1 day )
 	</select>
 	
 
@@ -113,6 +120,7 @@
 			totalPrice,
 			orderNumber,
 			isValid,
+			clientSource,
 			createTime,
 			updateTime,
 			createUserId,
@@ -127,6 +135,7 @@
 			#{totalPrice},
 			#{orderNumber},
 			1,
+			#{clientSource},
 			CURRENT_TIMESTAMP(),
 			CURRENT_TIMESTAMP(),
 			#{createUserId},
@@ -153,6 +162,9 @@
 	        	</if>
 	        	<if test="isValid !=null and isValid !=''">
 	        		isValid=#{isValid},
+	        	</if>
+	        	<if test="clientSource !=null and clientSource !=''">
+	        		clientSource=#{clientSource},
 	        	</if>
 				updateTime=CURRENT_TIMESTAMP(),
 				updateUserId=#{updateUserId} ,

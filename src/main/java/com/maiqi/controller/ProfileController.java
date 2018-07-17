@@ -67,6 +67,7 @@ public class ProfileController {
 				userService.saveAccount(user.getUserName(), user.getLoginName(), user.getUserDesc());
 				jresult.setIsSuccess(1);
 			}catch(Exception e){
+				e.printStackTrace();
 				jresult.setIsSuccess(0);
 				jresult.setMessage(e.getMessage());
 			}

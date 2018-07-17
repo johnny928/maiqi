@@ -24,6 +24,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		
 		let orderId = $stateParams.orderId;
 		$scope.salesperson = {};
+		$scope.clientSource = {};
 		$scope.orderInfo = {client:{},order:{}};
 		
 		let initSelect2 = function(_client){
@@ -264,6 +265,18 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
     		}
 		};
 		
+		let initClientSource = function(){
+			let initS = $scope.orderInfo.order.clientSource || $scope.orderInfo.client.clientSource;
+			if( initS ){
+    			let sel = $scope.operators.filter(function(node,index){
+    				return node.userId == initS;
+    			});
+    			if(sel && sel.length>0){
+    				$scope.clientSource.selected = sel[0];
+    			}
+    		}
+		};
+		
 		let loadTab1 = function(){
 			Metronic.blockUI({
                 target: "#orderEditPanel",
@@ -274,8 +287,8 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				.then(function(response) {
 		        	let res = response.data;
 		        	if(res.isSuccess && res.data && res.data.allOperators){
-		        		$scope.operators = res.data.allOperators;
-		        		$scope.author = res.data.author;
+		        		$scope.operators = res.data.allOperators || [];
+		        		$scope.author = res.data.author || {};
 		        	}
 		        })
 		        .then(function(_res){
@@ -284,7 +297,8 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				        	let res = response.data;
 				        	$log.log(res);
 				        	if(res.isSuccess){
-				        		$scope.orderInfo = res.data.orderInfo;
+				        		$scope.orderInfo.client = res.data.orderInfo.client || {};
+				        		$scope.orderInfo.order = res.data.orderInfo.order || {};
 				        		$scope.orderNumber = res.data.orderInfo.order.orderNumber;
 				        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
 				        		initTags($scope.orderInfo);
@@ -292,6 +306,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				        })
 				        .then(function(){
 				        	initOperator();
+				        	initClientSource();
 				        })
 		        })
 		        .finally(function(){
@@ -387,6 +402,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				$scope.orderInfo.client.birthday = $filter('date')($scope.orderInfo.client.birthday,'yyyy-MM-dd');
 			}
 			$scope.orderInfo.client.label = $('.client_label').val();
+			$scope.orderInfo.client.clientSource = ($scope.clientSource.selected && $scope.clientSource.selected.userId) || '';
 		};
 		
 		let getOrderData = function(){

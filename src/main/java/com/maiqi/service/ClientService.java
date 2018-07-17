@@ -41,8 +41,8 @@ public class ClientService {
 		}
 	}
 	
-	public List<Client> getClientsList(Map params){
-		return clientDao.selectClients(params);
+	public List<Map<String,Object>> getClientsList(Map params){
+		return clientDao.selectClients4V(params);
 	}
 	
 	public int getClientsListCnt(Map params){

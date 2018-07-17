@@ -16,6 +16,7 @@
 		<result column="updateTime" property="updateTime" />
 		<result column="createUserId" property="createUserId" />
 		<result column="updateUserId" property="updateUserId" />
+		<result column="clientSource" property="clientSource" />
 	</resultMap>
 	
 	<!--  分页后缀  -->
@@ -57,6 +58,9 @@
 			<if test="createDateE !=null and createDateE !=''">
 				and createTime &lt; DATE_ADD(str_to_date(#{createDateE, jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),interval 1 day)
 			</if>
+			<if test="clientSource !=null and clientSource !=''">
+				and clientSource = #{clientSource, jdbcType=DATE}
+			</if>
 		</where>
 	</sql>
 	
@@ -69,6 +73,28 @@
 	<!-- 查询多条记录 -->
 	<select id="selectClients" parameterType="Map" resultMap="Client">
 		SELECT * FROM t_client 
+		<include refid="clients_list_whereCls"/>
+		order by createTime desc
+		<include refid="pageSuffix"/>
+	</select>
+	
+	<!-- 查询多条记录 -->
+	<select id="selectClients4V" parameterType="Map" resultMap="Client">
+		SELECT 
+			clientId,
+			clientName,
+			phoneNum,
+			sex,
+			birthday,
+			level,
+			label,
+			isValid,
+			createTime,
+			updateTime,
+			createUserId,
+			updateUserId,
+			(select t_user.userName from t_user where t_user.userId = clientSource ) clientSource 
+		FROM t_client 
 		<include refid="clients_list_whereCls"/>
 		order by createTime desc
 		<include refid="pageSuffix"/>
@@ -103,6 +129,7 @@
 			level,
 			label,
 			isValid,
+			clientSource,
 			createTime,
 			updateTime,
 			createUserId,
@@ -118,6 +145,7 @@
 			#{level},
 			#{label},
 			1,
+			#{clientSource},
 			CURRENT_TIMESTAMP(),
 			CURRENT_TIMESTAMP(),
 			#{createUserId},
@@ -145,6 +173,9 @@
 	        	</if>
 	        	<if test="label !=null and label !=''">
 	        		label=#{label},
+	        	</if>
+	        	<if test="clientSource !=null and clientSource !=''">
+	        		clientSource=#{clientSource},
 	        	</if>
 	        	isValid=#{isValid},
 				updateTime=CURRENT_TIMESTAMP(),

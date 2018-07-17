@@ -87,6 +87,7 @@ public class OrderController {
 			jresult.setRecordsFiltered(cnt);
 			jresult.setRecordsTotal(cnt);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setData(new ArrayList());
 			jresult.setDraw(Integer.parseInt(draw));
 			jresult.setRecordsFiltered(0);
@@ -114,6 +115,7 @@ public class OrderController {
 			jresult.setData(data);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
 		}
@@ -130,6 +132,7 @@ public class OrderController {
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
 		}		
@@ -184,6 +187,7 @@ public class OrderController {
 			jresult.setRecordsFiltered(cnt);
 			jresult.setRecordsTotal(cnt);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setData(new ArrayList());
 			jresult.setDraw(Integer.parseInt(draw));
 			jresult.setRecordsFiltered(0);
@@ -223,6 +227,7 @@ public class OrderController {
 			jresult.setRecordsFiltered(cnt);
 			jresult.setRecordsTotal(cnt);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setData(new ArrayList());
 			jresult.setDraw(Integer.parseInt(draw));
 			jresult.setRecordsFiltered(0);
@@ -265,6 +270,7 @@ public class OrderController {
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
 		}		

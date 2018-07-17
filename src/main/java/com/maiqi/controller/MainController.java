@@ -80,6 +80,7 @@ public class MainController {
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
 		}catch(Exception e){
+			e.printStackTrace();
 			jresult.setIsSuccess(0);
 			jresult.setMessage("获取数据出现异常！");
 		}		

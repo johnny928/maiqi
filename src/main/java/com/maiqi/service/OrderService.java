@@ -117,6 +117,7 @@ public class OrderService {
 		}
 		clientService.saveClient(client);
 		order.setClientId(client.getClientId());
+		order.setClientSource(client.getClientSource());
 		saveOrder(order);
 	}
 	

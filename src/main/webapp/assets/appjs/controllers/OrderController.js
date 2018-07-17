@@ -100,13 +100,16 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
                     	"data": "salesperson"
                     },
                     {	
+                    	"data": "clientSource"
+                    },
+                    {	
                     	"data": null
                     }
                 ],
                "columnDefs": [
 	               {
 	            	   'defaultContent':'',
-	            	   'targets': [0,1,2,3,4,5]
+	            	   'targets': [0,1,2,3,4,5,6]
 	               },
 	               {
 	            	   'targets': [3],
@@ -116,7 +119,7 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
 	                	}
 	               },
 	               {
-	            	   'targets': [5],
+	            	   'targets': [6],
 	                	"createdCell": function(td, cellData, rowData, row, col){
 	                		var html = '<button class="btn btn-primary" ng-click="orderEdit(\''+rowData.orderId+'\')" >修改</button>';
 	                		$(td).append($compile(html)($scope));

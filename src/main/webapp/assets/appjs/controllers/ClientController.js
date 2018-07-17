@@ -93,13 +93,15 @@ MetronicApp.controller('ClientsController', ['$rootScope', '$scope', 'settings',
                     },
                     {	
                     	"data": "birthday",
-                    	
                     },
                     {	
                     	"data": "level"
                     },
                     {	
                     	"data": "label"
+                    },
+                    {	
+                    	"data": "clientSource"
                     },
                     {	
                     	"data": "createTime"
@@ -111,16 +113,16 @@ MetronicApp.controller('ClientsController', ['$rootScope', '$scope', 'settings',
                "columnDefs": [
 	               {
 	            	   'defaultContent':'',
-	            	   'targets': [0,1,2,3,4,5,6,7]
+	            	   'targets': [0,1,2,3,4,5,6,7,8]
 	               },
 	               {
-	            	   'targets': [6],
+	            	   'targets': [7],
 	                	"render": function(data, type, full, meta){
 	                		return $filter('date')(data,'yyyy-MM-dd HH:mm:ss');
 	                	}
 	               },
 	               {
-	            	   'targets': [7],
+	            	   'targets': [8],
 	                	"createdCell": function(td, cellData, rowData, row, col){
 	                		let eles = ['<div><button class="btn btn-xs btn-success" ng-click="clientEdit(\''+rowData.clientId+'\')" >修改</button>',
 				         		            '<p></p>',

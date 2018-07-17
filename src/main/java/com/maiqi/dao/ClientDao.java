@@ -17,4 +17,6 @@ public interface ClientDao {
 	public Client selectClientByPhoneNum(String phoneNum);
 	
 	public int selectClientsCnt(Map<String,Object> params);
+	
+	public List<Map<String,Object>> selectClients4V(Map<String,Object> params);
 }

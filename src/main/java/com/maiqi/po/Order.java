@@ -15,6 +15,7 @@ public class Order {
 	private int isValid;
 	private Timestamp updateTime;
 	private String orderNumber;
+	private String clientSource;
 	
 	public String getOrderId() {
 		return orderId;
@@ -81,5 +82,11 @@ public class Order {
 	}
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+	public String getClientSource() {
+		return clientSource;
+	}
+	public void setClientSource(String clientSource) {
+		this.clientSource = clientSource;
 	}
 }

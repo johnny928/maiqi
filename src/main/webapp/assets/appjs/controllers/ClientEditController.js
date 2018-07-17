@@ -54,15 +54,28 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
             animate: true,
             overlayColor: 'none'
         });
-		maiqi.post({url:'views/clients/getClientById',data:{clientId: clientId},errMsg:'获取客户数据失败！',container:'#clientEditPanel'})
+		maiqi.post({url:'getOperators',errMsg:'获取操作员数据失败！',container:'#clientEditPanel'})
 			.then(function(response) {
 	        	let res = response.data;
-	        	$log.log(res);
-	        	if(res.isSuccess){
-	        		$scope.client = res.data.client;
-	        		initSelect2( $scope.client || null);
-	        		initTags($scope.client);
+	        	if(res.isSuccess && res.data && res.data.allOperators){
+	        		$scope.operators = res.data.allOperators || [];
+	        		$scope.author = res.data.author || {};
 	        	}
+	        })
+	        .then(function(){
+	        	maiqi.post({url:'views/clients/getClientById',data:{clientId: clientId},errMsg:'获取客户数据失败！',container:'#clientEditPanel'})
+					.then(function(response) {
+			        	let res = response.data;
+			        	$log.log(res);
+			        	if(res.isSuccess){
+			        		$scope.client = res.data.client || {};
+			        		initSelect2( $scope.client || null);
+			        		initTags($scope.client);
+			        	}
+			        })
+			        .then(function(){
+			        	initClientSource();
+			        })
 	        })
 	        .finally(function(){
 	        	Metronic.unblockUI("#clientEditPanel");
@@ -78,6 +91,7 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 			$scope.client.birthday = $filter('date')($scope.client.birthday,'yyyy-MM-dd');
 		}
 		$scope.client.label = $('.client_label').val();
+		$scope.client.clientSource = ($scope.clientSource.selected && $scope.clientSource.selected.userId) || '';
 	};
 	
 	$scope.saveClient = function(){
@@ -104,6 +118,19 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 	        .finally(function(){
 	        	Metronic.unblockUI("#clientEditPanel");
 	        });
+	};
+	
+	let initClientSource = function(){
+		$scope.clientSource = {};
+		let initS = $scope.client.clientSource;
+		if( initS ){
+			let sel = $scope.operators.filter(function(node,index){
+				return node.userId == initS;
+			});
+			if(sel && sel.length>0){
+				$scope.clientSource.selected = sel[0];
+			}
+		}
 	};
 	
 	initSelect2();
