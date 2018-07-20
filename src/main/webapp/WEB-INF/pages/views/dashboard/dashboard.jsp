@@ -24,7 +24,7 @@
 				</div>
 				<div class="details">
 					<div class="number">
-						1349
+						{{stat.quantity||'0'}}
 					</div>
 					<div class="desc">
 						今日总订单数
@@ -39,7 +39,7 @@
 				</div>
 				<div class="details">
 					<div class="number">
-						12,5M$
+						{{stat.sale||'0'}}￥
 					</div>
 					<div class="desc">
 						今日总销售额
@@ -54,7 +54,7 @@
 				</div>
 				<div class="details">
 					<div class="number">
-						549
+						{{stat.myQuantity||'0'}}
 					</div>
 					<div class="desc">
 						今日我的订单数
@@ -69,7 +69,7 @@
 				</div>
 				<div class="details">
 					<div class="number">
-						+89%
+						{{stat.mySale||'0'}}￥
 					</div>
 					<div class="desc">
 						今日我的销售额
@@ -91,16 +91,20 @@
 					<div class="actions">
 						<div class="btn-group btn-group-devided" data-toggle="buttons">
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
-							<input type="radio" name="options" class="toggle" id="option1">按日</label>
+							<input type="radio" name="sales_stat_options" class="toggle" value="showSalesStatDay">按日</label>
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-							<input type="radio" name="options" class="toggle" id="option2">按月</label>
+							<input type="radio" name="sales_stat_options" class="toggle" value="showSalesStatMonth">按月</label>
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-							<input type="radio" name="options" class="toggle" id="option2">按年</label>
+							<input type="radio" name="sales_stat_options" class="toggle" value="showSalesStatYear">按年</label>
 						</div>
 					</div>
 				</div>
 				<div class="portlet-body">
-					<div id="sales_statistics" class="portlet-body-morris-fit morris-chart" style="height: 260px">
+					<div id="showSalesStatDay" class="portlet-body-morris-fit morris-chart sales_statistics" ng-show="showSalesStat == 'showSalesStatDay'" style="height: 260px">
+					</div>
+					<div id="showSalesStatMonth" class="portlet-body-morris-fit morris-chart sales_statistics" ng-show="showSalesStat == 'showSalesStatMonth'" style="height: 260px">
+					</div>
+					<div id="showSalesStatYear" class="portlet-body-morris-fit morris-chart sales_statistics" ng-show="showSalesStat == 'showSalesStatYear'" style="height: 260px">
 					</div>
 				</div>
 			</div>

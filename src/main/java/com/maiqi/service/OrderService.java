@@ -181,4 +181,12 @@ public class OrderService {
 		resM = orderDao.getTodaySales(params);
 		return resM;
 	}
+	
+	public List<Map<String,Object>> getSalesStatByDay(){
+		return orderDao.getSalesStatByDay(null);
+	}
+	
+	public List<String> getSalesStatDayCon(){
+		return orderDao.getSalesStatDayCon(null);
+	}
 }

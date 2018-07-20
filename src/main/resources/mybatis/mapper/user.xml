@@ -37,6 +37,10 @@
 	<select id="selectUsersCnt" parameterType="Map" resultType="int">
 		SELECT count(1) cnt FROM t_user 
 	</select>
+	
+	<select id="getAllUserName" resultType="java.lang.String">
+		SELECT userName FROM t_user 
+	</select>
 
 	<!-- 插入语句 -->
 	<insert id="createUser" parameterType="com.maiqi.po.User" >

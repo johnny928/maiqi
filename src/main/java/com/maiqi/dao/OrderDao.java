@@ -23,4 +23,8 @@ public interface OrderDao {
 	public List<Map<String,Object>> selectOrders4V(Map<String,Object> params);
 	
 	public Map<String,Object> getTodaySales(Map<String,Object> params);
+	
+	public List<Map<String,Object>> getSalesStatByDay(Map<String,Object> params);
+	
+	public List<String> getSalesStatDayCon(Map<String,Object> params);
 }

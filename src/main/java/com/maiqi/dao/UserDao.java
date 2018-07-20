@@ -24,4 +24,6 @@ public interface UserDao {
 	public int selectUsersCnt();
 	
 	public int saveUserProportion(User user);
+	
+	public List<String> getAllUserName();
 }
