@@ -93,6 +93,11 @@
 		select CONCAT(date_format(NOW(), '%y%m%d'),floor(date_format(NOW(3), '%H%i%s%f')/1000))
 	</select>
 	
+	<select id="getDiscount" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+		select (select m.discount from t_member_level m where m.`level` = c.`level`) discount from t_order o, t_client c where o.clientId = c.clientId
+			and orderId = #{orderId}
+	</select>
+	
 	<select id="getTodaySales" parameterType="Map" resultType="java.util.Map">
 		select SUM(ifnull(d.quantity,0)) quantity,SUM(ifnull(d.totalPrice,0)) sale,
 			SUM( CASE when o.salespersonId=#{userId} then ifnull(d.quantity,0) else 0 END) myQuantity,
@@ -134,6 +139,152 @@
 			union ALL
 			select date_format( NOW() , '%Y-%m-%d') as statDate
 		) d order by statDate asc
+	</select>
+	
+	<select id="getSalesStatByMonth" parameterType="Map" resultType="java.util.Map">
+		select date_format(o.orderTime, '%Y-%m') sdate,
+			(select userName from t_user u where u.userId = o.salespersonId) salesperson, 
+			SUM(ifnull(d.totalPrice,0)) sales 
+		from t_order o , t_orderdetails d where 
+			o.orderId = d.orderId 
+			and o.isValid = 1 and d.isValid = 1 
+			and o.orderTime &lt; DATE_ADD( date_format(NOW(), '%Y-%m-%d'),interval 1 month )
+			and o.orderTime &gt;= DATE_ADD( date_format(NOW(), '%Y-%m-%d'),interval -12 month )
+		group by date_format(o.orderTime, '%Y-%m'), o.salespersonId
+		order by sdate asc
+	</select>
+	
+	<select id="getSalesStatMonthCon" parameterType="Map" resultType="java.lang.String">
+		select statDate from (
+			select date_format(DATE_ADD( NOW(),interval -12 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -11 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -10 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -9 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -8 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -7 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -6 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -5 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -4 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -3 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -2 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -1 month ), '%Y-%m') as statDate
+			union ALL
+			select date_format( NOW() , '%Y-%m') as statDate
+		) d order by statDate asc
+	</select>
+	
+	<select id="getSalesStatByYear" parameterType="Map" resultType="java.util.Map">
+		select date_format(o.orderTime, '%Y') sdate,
+			(select userName from t_user u where u.userId = o.salespersonId) salesperson, 
+			SUM(ifnull(d.totalPrice,0)) sales 
+		from t_order o , t_orderdetails d where 
+			o.orderId = d.orderId 
+			and o.isValid = 1 and d.isValid = 1 
+			and o.orderTime &lt; DATE_ADD( date_format(NOW(), '%Y-%m-%d'),interval 1 year )
+			and o.orderTime &gt;= DATE_ADD( date_format(NOW(), '%Y-%m-%d'),interval -3 year )
+		group by date_format(o.orderTime, '%Y'), o.salespersonId
+		order by sdate asc
+	</select>
+	
+	<select id="getSalesStatYearCon" parameterType="Map" resultType="java.lang.String">
+		select statDate from (
+			select date_format(DATE_ADD( NOW(),interval -3 year ), '%Y') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -2 year ), '%Y') as statDate
+			union ALL
+			select date_format(DATE_ADD( NOW(),interval -1 year ), '%Y') as statDate
+			union ALL
+			select date_format( NOW() , '%Y') as statDate
+		) d order by statDate asc
+	</select>
+	
+	<!-- 分成统计 -->
+	<select id="getProStatByDay" parameterType="Map" resultType="java.util.Map">
+		select statDate,u.userName userName,
+			IFNULL((select SUM(CASE when o.clientSource is null then ROUND(u.proportion*od.totalPrice/10,2) when o.clientSource=u.userId then od.totalPrice else 0 end) 
+				from t_order o, t_orderdetails od where o.orderId = od.orderId and o.isValid=1 and od.isValid=1 
+				and o.orderTime &gt;= d.statDate and o.orderTime &lt; DATE_ADD( d.statDate, interval 1 day)),0) profit
+		 from (
+					select date_format(DATE_ADD( NOW(),interval -7 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -6 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -5 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -4 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -3 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -2 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -1 day ), '%Y-%m-%d') as statDate
+					union ALL
+					select date_format( NOW() , '%Y-%m-%d') as statDate
+				) d ,t_user u 
+		ORDER BY d.statDate ,u.userName
+	</select>
+	
+	<select id="getProStatByMonth" parameterType="Map" resultType="java.util.Map">
+		select statDate,u.userName userName ,
+			IFNULL((select SUM(CASE when o.clientSource is null then ROUND(u.proportion*od.totalPrice/10,2) when o.clientSource=u.userId then od.totalPrice else 0 end) 
+				from t_order o, t_orderdetails od where o.orderId = od.orderId and o.isValid=1 and od.isValid=1 
+				and o.orderTime &gt;= CONCAT(d.statDate,'-01') and o.orderTime &lt;  DATE_ADD( CONCAT(d.statDate,'-01'), interval 1 MONTH) ),0) profit
+		 from (
+					select date_format(DATE_ADD( NOW(),interval -12 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -11 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -10 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -9 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -8 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -7 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -6 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -5 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -4 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -3 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -2 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -1 month ), '%Y-%m') as statDate
+					union ALL
+					select date_format( NOW() , '%Y-%m') as statDate
+				) d ,t_user u 
+		ORDER BY d.statDate ,u.userName
+	</select>
+	
+	<select id="getProStatByYear" parameterType="Map" resultType="java.util.Map">
+		select statDate,u.userName userName ,
+			IFNULL((select SUM(CASE when o.clientSource is null then ROUND(u.proportion*od.totalPrice/10,2) when o.clientSource=u.userId then od.totalPrice else 0 end) 
+				from t_order o, t_orderdetails od where o.orderId = od.orderId and o.isValid=1 and od.isValid=1 
+				and o.orderTime &gt;= CONCAT(d.statDate,'-01-01') and o.orderTime &lt;  DATE_ADD( CONCAT(d.statDate,'-01-01'), interval 1 year) ),0) profit
+		 from (
+					select date_format(DATE_ADD( NOW(),interval -3 year ), '%Y') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -2 year ), '%Y') as statDate
+					union ALL
+					select date_format(DATE_ADD( NOW(),interval -1 year ), '%Y') as statDate
+					union ALL
+					select date_format( NOW() , '%Y') as statDate
+				) d ,t_user u 
+		ORDER BY d.statDate ,u.userName
 	</select>
 	
 

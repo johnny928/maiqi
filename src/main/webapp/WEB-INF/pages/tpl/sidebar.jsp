@@ -22,15 +22,21 @@
 			</a>
 		</li>
 		<li class="start">
+			<a href="#/clients">
+			<i class="icon-user"></i>
+			<span class="title">客户管理</span>
+			</a>
+		</li>
+		<li class="start">
 			<a href="#/proportion">
 			<i class="icon-diamond"></i>
 			<span class="title">分成管理</span>
 			</a>
 		</li>
 		<li class="start">
-			<a href="#/clients">
-			<i class="icon-user"></i>
-			<span class="title">客户管理</span>
+			<a href="#/memberLevels">
+			<i class="icon-diamond"></i>
+			<span class="title">会员等级管理</span>
 			</a>
 		</li>
 		<li class="start">

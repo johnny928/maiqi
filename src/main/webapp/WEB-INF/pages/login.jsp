@@ -79,8 +79,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div class="form-actions">
 			<!-- <button type="submit" class="btn btn-success uppercase col-xs-6">Login</button> -->
 			<a id="login_btn" class="btn btn-success uppercase">Login</a>
-			<label class="rememberme check">
-			<input type="checkbox" name="remember" value="1"/>Remember </label>
+			
 		</div>
 	</form>
 	<!-- END LOGIN FORM -->

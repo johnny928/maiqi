@@ -30,7 +30,8 @@
 			<div class="portlet light profile-sidebar-portlet">
 				<!-- SIDEBAR USERPIC -->
 				<div class="profile-userpic">
-					<img src="assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
+					<img ng-if="!userData.userImgVersion" src="assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
+					<img ng-if="userData.userImgVersion" ng-src="views/profile/getIcon?v={{userData.userImgVersion}}" class="img-responsive" alt="">
 				</div>
 				<!-- END SIDEBAR USERPIC -->
 				<!-- SIDEBAR USER TITLE -->

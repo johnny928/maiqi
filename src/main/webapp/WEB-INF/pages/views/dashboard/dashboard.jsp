@@ -91,20 +91,20 @@
 					<div class="actions">
 						<div class="btn-group btn-group-devided" data-toggle="buttons">
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
-							<input type="radio" name="sales_stat_options" class="toggle" value="showSalesStatDay">按日</label>
+							<input type="radio" name="sales_stat_options" class="toggle" value="salesStatDay">按日</label>
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-							<input type="radio" name="sales_stat_options" class="toggle" value="showSalesStatMonth">按月</label>
+							<input type="radio" name="sales_stat_options" class="toggle" value="salesStatMonth">按月</label>
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-							<input type="radio" name="sales_stat_options" class="toggle" value="showSalesStatYear">按年</label>
+							<input type="radio" name="sales_stat_options" class="toggle" value="salesStatYear">按年</label>
 						</div>
 					</div>
 				</div>
 				<div class="portlet-body">
-					<div id="showSalesStatDay" class="portlet-body-morris-fit morris-chart sales_statistics" ng-show="showSalesStat == 'showSalesStatDay'" style="height: 260px">
+					<div id="salesStatDay" class="portlet-body-morris-fit morris-chart" ng-show="showSalesStatTabId == 'salesStatDay'" style="height: 300px">
 					</div>
-					<div id="showSalesStatMonth" class="portlet-body-morris-fit morris-chart sales_statistics" ng-show="showSalesStat == 'showSalesStatMonth'" style="height: 260px">
+					<div id="salesStatMonth" class="portlet-body-morris-fit morris-chart" ng-show="showSalesStatTabId == 'salesStatMonth'" style="height: 300px">
 					</div>
-					<div id="showSalesStatYear" class="portlet-body-morris-fit morris-chart sales_statistics" ng-show="showSalesStat == 'showSalesStatYear'" style="height: 260px">
+					<div id="salesStatYear" class="portlet-body-morris-fit morris-chart" ng-show="showSalesStatTabId == 'salesStatYear'" style="height: 300px">
 					</div>
 				</div>
 			</div>
@@ -121,16 +121,20 @@
 					<div class="actions">
 						<div class="btn-group btn-group-devided" data-toggle="buttons">
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
-							<input type="radio" name="options" class="toggle" id="option1">按日</label>
+							<input type="radio" name="pro_stat_options" class="toggle" value="proStatDay">按日</label>
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-							<input type="radio" name="options" class="toggle" id="option2">按月</label>
+							<input type="radio" name="pro_stat_options" class="toggle" value="proStatMonth">按月</label>
 							<label class="btn btn-transparent grey-salsa btn-circle btn-sm">
-							<input type="radio" name="options" class="toggle" id="option2">按年</label>
+							<input type="radio" name="pro_stat_options" class="toggle" value="proStatYear">按年</label>
 						</div>
 					</div>
 				</div>
 				<div class="portlet-body">
-					<div id="sales_proportion" class="portlet-body-morris-fit morris-chart" style="height: 260px">
+					<div id="proStatDay" class="portlet-body-morris-fit morris-chart" ng-show="showProStatTabId == 'proStatDay'" style="height: 300px">
+					</div>
+					<div id="proStatMonth" class="portlet-body-morris-fit morris-chart" ng-show="showProStatTabId == 'proStatMonth'" style="height: 300px">
+					</div>
+					<div id="proStatYear" class="portlet-body-morris-fit morris-chart" ng-show="showProStatTabId == 'proStatYear'" style="height: 300px">
 					</div>
 				</div>
 			</div>

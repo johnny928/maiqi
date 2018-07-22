@@ -139,7 +139,7 @@ public class OrderService {
 			orderDetail.setLabel(goods.getLabel());
 			orderDetail.setOrderId(orderId);
 			orderDetail.setQuantity(quantity);
-			orderDetail.setDiscount(new BigDecimal(10));//10折，即不打折
+			orderDetail.setDiscount(discount);
 			orderDetail.setPrice(orderDetail.getOrgPrice()
 					.multiply(new BigDecimal(orderDetail.getQuantity())));
 			orderDetail.setTotalPrice(Utils.round(orderDetail.getPrice()
@@ -188,5 +188,37 @@ public class OrderService {
 	
 	public List<String> getSalesStatDayCon(){
 		return orderDao.getSalesStatDayCon(null);
+	}
+	
+	public List<Map<String,Object>> getSalesStatByMonth(){
+		return orderDao.getSalesStatByMonth(null);
+	}
+	
+	public List<String> getSalesStatMonthCon(){
+		return orderDao.getSalesStatMonthCon(null);
+	}
+	
+	public List<Map<String,Object>> getSalesStatByYear(){
+		return orderDao.getSalesStatByYear(null);
+	}
+	
+	public List<String> getSalesStatYearCon(){
+		return orderDao.getSalesStatYearCon(null);
+	}
+	
+	public List<Map<String,Object>> getProStatByDay(){
+		return orderDao.getProStatByDay(null);
+	}
+	
+	public List<Map<String,Object>> getProStatByMonth(){
+		return orderDao.getProStatByMonth(null);
+	}
+	
+	public List<Map<String,Object>> getProStatByYear(){
+		return orderDao.getProStatByYear(null);
+	}
+	
+	public BigDecimal getDiscount(String orderId){
+		return orderDao.getDiscount(orderId);
 	}
 }

@@ -32,6 +32,9 @@
 		
 		<file_encoding>UTF-8</file_encoding>
 		<JDK.version>1.8</JDK.version>
+		
+		<commons.fileupload.version>1.2.1</commons.fileupload.version>
+		<commons.io.version>1.3.2</commons.io.version>
 
 	</properties>
 
@@ -197,6 +200,17 @@
 		    <version>${apache.beanutils.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>${commons.io.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>${commons.fileupload.version}</version>
+		</dependency>
 
 	</dependencies>
 	<build>

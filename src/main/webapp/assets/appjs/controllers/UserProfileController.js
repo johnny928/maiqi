@@ -1,7 +1,7 @@
 'use strict';
 
 MetronicApp.controller('UserProfileController', function($rootScope, $scope,
-		$http, $timeout, $log) {
+		$http, $timeout, $log, maiqi) {
 	$scope.$on('$viewContentLoaded',
 			function() {
 				Metronic.initAjax(); // initialize core components
@@ -25,6 +25,7 @@ MetronicApp.controller('UserProfileController', function($rootScope, $scope,
 		var result = response.data;
 		if(result.isSuccess == 1){
 			$scope.author = result.data.author;
+			$rootScope.userData = result.data.userData;
 			orgAuthorData = jQuery.extend(orgAuthorData, $scope.author, {});
 		}
 	}, function errorCallback(response) {
@@ -91,5 +92,80 @@ MetronicApp.controller('UserProfileController', function($rootScope, $scope,
 
 	$scope.accountCancel = function() {
 		$scope.author = jQuery.extend({}, orgAuthorData, {});
+	};
+	
+	$scope.uploadIcon = function(){
+		var form = new FormData();
+        var file = $('#user_icon')[0].files[0];
+        form.append('icon', file);
+        maiqi.post({url:'views/profile/uploadIcon',
+			data:form,
+			headers:{'Content-Type':undefined},
+			transformRequest: angular.identity,
+			errMsg:'上传头像失败！',container:'#accountPanel'})
+			.then(function(response){
+	        	let res = response.data;
+	        	if(res.isSuccess && res.data.userImgVersion){
+	        		$scope.$applyAsync(function(){
+	        			$rootScope.userData.userImgVersion = res.data.userImgVersion;
+	        		});
+		        	Metronic.alert({
+	                    type: 'success',
+	                    icon: 'check',
+	                    message: '上传头像成功！',
+	                    container: '#accountPanel',
+	                    closeInSeconds: 3, 
+	                    place: 'prepend'
+	                });
+	        	}	        
+			})
+			.finally(function(){
+				Metronic.unblockUI("#accountPanel");
+			})
+	};
+	
+	$scope.changePassword = function(){
+		if(!$('#orgPass').val()){
+			Metronic.alert({
+                type: 'danger',
+                icon: 'warning',
+                message: '请录入原密码！',
+                container: '#accountPanel',
+                closeInSeconds: 3, 
+                place: 'prepend'
+            });
+		}
+		if(!$('#newPass').val() || !$('#rePass').val() || $('#newPass').val()!=$('#rePass').val()){
+			Metronic.alert({
+                type: 'danger',
+                icon: 'warning',
+                message: '请输入新密码，并且两次输入要一致！',
+                container: '#accountPanel',
+                closeInSeconds: 3, 
+                place: 'prepend'
+            });
+		}
+		maiqi.post({url:'views/profile/changePassword',
+			data:{ orgPass: $('#orgPass').val(), newPass: $('#newPass').val() },
+			container:'#accountPanel'})
+			.then(function(response){
+	        	let res = response.data;
+	        	if(res.isSuccess ){
+	        		$('#orgPass').val('');
+	        		$('#newPass').val('');
+	        		$('#rePass').val('');
+		        	Metronic.alert({
+	                    type: 'success',
+	                    icon: 'check',
+	                    message: '密码修改成功！',
+	                    container: '#accountPanel',
+	                    closeInSeconds: 3, 
+	                    place: 'prepend'
+	                });
+	        	}	        
+			})
+			.finally(function(){
+				Metronic.unblockUI("#accountPanel");
+			})
 	};
 });

@@ -26,28 +26,34 @@ MetronicApp.controller('DashboardController', function($rootScope, $scope, $http
     };
     
     let initSalesStat = function(){
-    	$scope.showSalesStat = 'showSalesStatDay';
-    	$scope[$scope.showSalesStat]();
+    	$scope.showSalesStatTabId = 'salesStatDay';
+    	$scope.showSalesStat( $scope.showSalesStatTabId );
     	$("input[name='sales_stat_options']").on('change',function(){
-    		let showId = $("input[name='sales_stat_options']:checked").val();
     		$scope.$apply(function(){
-    			$scope.showSalesStat = showId;
+    			$scope.showSalesStatTabId = $("input[name='sales_stat_options']:checked").val();
     		});
-    		$scope[$scope.showSalesStat]();
+    		$scope.showSalesStat( $scope.showSalesStatTabId );
     		});
     }
     
-    $scope.showSalesStatDay = function(){
+    $scope.showSalesStat = function(showId){
+    	$scope.salesStatUrl = {
+			'salesStatDay':'getSalesStatByDay',
+			'salesStatMonth':'getSalesStatByMonth',
+			'salesStatYear':'getSalesStatByYear'
+    	};
     	if(echarts){
-    		let myChart = echarts.init(document.getElementById('showSalesStatDay'));
-
-    		maiqi.post({url:'views/dashboard/getSalesStatByDay',
+    		let myChart = echarts.init(document.getElementById(showId));
+    		maiqi.post({url:'views/dashboard/'+$scope.salesStatUrl[showId],
     			errMsg:'获取数据失败！',container:'#dashboardPanel'})
     			.then(function(response){
     	        	let res = response.data;
     	        	console.log(res);
     	        	if(res.isSuccess && res.data){
-    	        		let series = res.data.salesStatByDay;
+    	        		let series = res.data.salesStat;
+    	        		let toal = getToal(series);
+    	        		let users = res.data.users;
+    	        		users.push('Toal');
     	        		series = series.map(function(item){
     	        			Object.assign(item,{
     	        				type:'line',
@@ -56,6 +62,14 @@ MetronicApp.controller('DashboardController', function($rootScope, $scope, $http
     	        			});
     	        			return item;
     	        		});
+    	        		series.push(
+	        					{
+	        			            name:'Toal',
+	        			            type:'line',
+	        			            stack: '总量',
+	        			            areaStyle: {normal: {}},
+	        			            data:toal
+	        			        });
     	        		let option = {
     	        			    title: {
     	        			        text: ''
@@ -70,12 +84,21 @@ MetronicApp.controller('DashboardController', function($rootScope, $scope, $http
     	        			        }
     	        			    },
     	        			    legend: {
-    	        			        data:res.data.users
+    	        			        data:users,
+    	        			        width:'50%',
+    	        			        left:'20'
     	        			    },
     	        			    toolbox: {
     	        			        feature: {
+    	        			        	dataZoom: {
+    	        			                yAxisIndex: 'none'
+    	        			            },
+    	        			            dataView: {readOnly: false},
+    	        			            magicType: {type: ['line', 'bar']},
+    	        			            restore: {},
     	        			            saveAsImage: {}
-    	        			        }
+    	        			        },
+    	        			        right:30
     	        			    },
     	        			    grid: {
     	        			        left: '3%',
@@ -106,6 +129,123 @@ MetronicApp.controller('DashboardController', function($rootScope, $scope, $http
     	}
     };
     
+    
+    let initProStat = function(){
+    	$scope.showProStatTabId = 'proStatDay';
+    	$scope.showProStat( $scope.showProStatTabId );
+    	$("input[name='pro_stat_options']").on('change',function(){
+    		$scope.$apply(function(){
+    			$scope.showProStatTabId = $("input[name='pro_stat_options']:checked").val();
+    		});
+    		$scope.showProStat( $scope.showProStatTabId );
+    		});
+    }
+    
+    $scope.showProStat = function(showId){
+    	$scope.proStatUrl = {
+			'proStatDay':'getProStatByDay',
+			'proStatMonth':'getProStatByMonth',
+			'proStatYear':'getProStatByYear'
+    	};
+    	if(echarts){
+    		let myChart = echarts.init(document.getElementById(showId));
+    		maiqi.post({url:'views/dashboard/'+$scope.proStatUrl[showId],
+    			errMsg:'获取数据失败！',container:'#dashboardPanel'})
+    			.then(function(response){
+    	        	let res = response.data;
+    	        	console.log(res);
+    	        	if(res.isSuccess && res.data){
+    	        		let series = res.data.salesStat;
+    	        		let toal = getToal(series);
+    	        		let users = res.data.users;
+    	        		users.push('Toal');
+    	        		series = series.map(function(item){
+    	        			Object.assign(item,{
+    	        				type:'line',
+        	                    stack: '总量',
+        	                    areaStyle: {normal: {}}
+    	        			});
+    	        			return item;
+    	        		});
+    	        		series.push(
+	        					{
+	        			            name:'Toal',
+	        			            type:'line',
+	        			            stack: '总量',
+	        			            areaStyle: {normal: {}},
+	        			            data:toal
+	        			        });
+    	        		let option = {
+    	        			    title: {
+    	        			        text: ''
+    	        			    },
+    	        			    tooltip : {
+    	        			        trigger: 'axis',
+    	        			        axisPointer: {
+    	        			            type: 'cross',
+    	        			            label: {
+    	        			                backgroundColor: '#6a7985'
+    	        			            }
+    	        			        }
+    	        			    },
+    	        			    legend: {
+    	        			        data:users,
+    	        			        width:'50%',
+    	        			        left:'20'
+    	        			    },
+    	        			    toolbox: {
+    	        			        feature: {
+    	        			        	dataZoom: {
+    	        			                yAxisIndex: 'none'
+    	        			            },
+    	        			            dataView: {readOnly: false},
+    	        			            magicType: {type: ['line', 'bar']},
+    	        			            restore: {},
+    	        			            saveAsImage: {}
+    	        			        },
+    	        			        right:30
+    	        			    },
+    	        			    grid: {
+    	        			        left: '3%',
+    	        			        right: '4%',
+    	        			        bottom: '3%',
+    	        			        containLabel: true
+    	        			    },
+    	        			    xAxis : [
+    	        			        {
+    	        			            type : 'category',
+    	        			            boundaryGap : false,
+    	        			            data : res.data.xAxis
+    	        			        }
+    	        			    ],
+    	        			    yAxis : [
+    	        			        {
+    	        			            type : 'value'
+    	        			        }
+    	        			    ],
+    	        			    series : series
+    	        			}
+    	        		myChart.setOption(option);
+    	        	}	        
+    			})
+    			.finally(function(){
+    				Metronic.unblockUI("#dashboardPanel");
+    			})
+    	}
+    };
+    
+    let getToal = function(seriies){
+    	let ser = seriies;
+    	let nser = ser.map(function(item){return item.data});
+    	let toal = [];
+    	nser.forEach(function(item){
+    		item.forEach(function(node,index){
+    			toal[index] = math.chain(math.number(toal[index]||0)).add(math.number(node)).round(2).done();
+    		});
+    	});
+    	return toal;
+    }
+    
     $scope.showSalesStatMonth = function(){
     };
     
@@ -114,4 +254,5 @@ MetronicApp.controller('DashboardController', function($rootScope, $scope, $http
     
     initStat();
     initSalesStat();
+    initProStat();
 });

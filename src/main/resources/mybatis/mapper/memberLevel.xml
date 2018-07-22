@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>    
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maiqi.dao.MemberLevelDao">
+	<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！ -->
+	<resultMap id="MemberLevel" type="com.maiqi.po.MemberLevel">
+		<id column="levelId" property="levelId" />
+		<result column="level" property="level" />
+		<result column="discount" property="discount" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+		<result column="levelDesc" property="levelDesc" />
+	</resultMap>
+	
+	<select id="selectMemberLevels" resultMap="MemberLevel">
+		SELECT * FROM t_member_level t order by level desc
+	</select>
+
+	<!-- 插入语句 -->
+	<insert id="createMemberLevel" parameterType="com.maiqi.po.MemberLevel" >
+
+		<selectKey keyProperty="levelId" resultType="java.lang.String" order="BEFORE">
+			select UUID()
+		</selectKey>
+
+		INSERT INTO t_member_level
+		(
+		levelId,
+		level,
+		discount,
+		levelDesc,
+		createTime,
+		updateTime,
+		createUserId,
+		updateUserId
+		)
+		VALUES
+		(
+		#{levelId},
+		#{level},
+		#{discount},
+		#{levelDesc},
+		CURRENT_TIMESTAMP(),
+		CURRENT_TIMESTAMP(),
+		#{createUserId},
+		#{createUserId}
+		)
+	</insert>
+	
+	<update id="saveMemberLevel" parameterType="com.maiqi.po.MemberLevel">  
+        update t_member_level   
+	        <set>
+	        	<if test="levelDesc !=null and levelDesc !=''">
+	        		levelDesc=#{levelDesc},
+	        	</if>
+	        	level=#{level},
+	        	discount=#{discount},
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+        where levelId=#{levelId}  
+    </update> 
+</mapper> 

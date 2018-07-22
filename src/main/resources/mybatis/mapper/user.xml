@@ -14,7 +14,24 @@
 		<result column="createUserId" property="createUserId" />
 		<result column="updateUserId" property="updateUserId" />
 		<result column="proportion" property="proportion" />
+		<result column="userImgVersion" property="userImgVersion" />
 	</resultMap>
+	
+	<resultMap id="UserExt" type="com.maiqi.po.UserExt">
+		<id column="userId" property="userId" />
+		<result column="userName" property="userName"/>
+		<result column="loginName" property="loginName" />
+		<result column="password" property="password" />
+		<result column="isAdmin" property="isAdmin" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<result column="createUserId" property="createUserId" />
+		<result column="updateUserId" property="updateUserId" />
+		<result column="proportion" property="proportion" />
+		<result column="userImg" property="userImg" jdbcType="BLOB" />
+		<result column="userImgVersion" property="userImgVersion" />
+	</resultMap>
+	
 	<!-- 查询单条记录 -->
 	<select id="selectUserById" parameterType="java.lang.String" resultMap="User">
 		SELECT * FROM t_user WHERE userId = #{userId}
@@ -22,7 +39,7 @@
 	
 	<!-- 查询用户列表 -->
 	<select id="selectOperators" resultType="java.util.Map">
-		SELECT userId,userName,loginName,userDesc,createTime,updateTime FROM t_user WHERE isAdmin = 0
+		SELECT userId,userName,loginName,userDesc,createTime,updateTime,userImgVersion FROM t_user WHERE isAdmin = 0
 	</select>
 	
 	<!-- 验证user -->
@@ -91,7 +108,9 @@
 	        	<if test="userDesc !=null and userDesc !=''">
 	        		userDesc=#{userDesc},
 	        	</if>
-	        	proportion=#{proportion},
+	        	<if test="password !=null and password !=''">
+	        		password=#{password},
+	        	</if>
 				updateTime=CURRENT_TIMESTAMP(),
 				updateUserId=#{updateUserId} ,
 			</set> 
@@ -107,4 +126,17 @@
 			</set> 
 		where userId=#{userId}  
     </update> 
+    
+    <update id="saveUserImg" parameterType="com.maiqi.po.UserExt">  
+        update t_user 
+			<set>
+	        	userImg=#{userImg,jdbcType=BLOB},
+	        	userImgVersion=#{userImgVersion},
+			</set> 
+		where userId=#{userId}  
+    </update>
+    
+    <select id="getUserImg" parameterType="java.lang.String" resultMap="UserExt">
+		SELECT * FROM t_user WHERE userId = #{userId}
+	</select>
 </mapper> 

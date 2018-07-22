@@ -1,6 +1,5 @@
 package com.maiqi.service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +12,7 @@ import com.maiqi.component.SessionManager;
 import com.maiqi.component.Utils;
 import com.maiqi.dao.UserDao;
 import com.maiqi.po.User;
+import com.maiqi.po.UserExt;
 
 @Service
 public class UserService {
@@ -36,6 +36,17 @@ public class UserService {
 		User user = userDao.verifyUser(loginName, passwordMD5);
 		if( user != null ){
 			sessionManager.sessionBound(user);
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean checkPassword(String password){
+		String passwordMD5 = SecurityUtils.getMD5(password);
+		String loginName = sessionManager.getAuthor().getLoginName();
+		User user = userDao.verifyUser(loginName, passwordMD5);
+		if( user != null ){
 			return true;
 		}else{
 			return false;
@@ -87,5 +98,25 @@ public class UserService {
 	
 	public List<String> getAllUserName(){
 		return userDao.getAllUserName();
+	}
+	
+	public int saveUserImg(UserExt userExt){
+		return userDao.saveUserImg(userExt);
+	}
+	
+	public UserExt getUserExt(String userId){
+		return userDao.getUserImg(userId);
+	}
+	
+	public User selectUserById(String userId){
+		return userDao.selectUserById(userId);
+	}
+	
+	public int savePassword(String pass){
+		User user = new User();
+		user.setUserId(sessionManager.getAuthor().getUserId());
+		user.setPassword(SecurityUtils.getMD5(pass));
+		user.setUpdateUserId(sessionManager.getAuthor().getUserId());
+		return userDao.saveUser(user);
 	}
 }

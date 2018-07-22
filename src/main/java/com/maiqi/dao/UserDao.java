@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.maiqi.po.User;
+import com.maiqi.po.UserExt;
 
 public interface UserDao {
 	public int createUser(User user);
@@ -26,4 +27,8 @@ public interface UserDao {
 	public int saveUserProportion(User user);
 	
 	public List<String> getAllUserName();
+	
+	public int saveUserImg(UserExt userExt);
+	
+	public UserExt getUserImg(String userId);
 }

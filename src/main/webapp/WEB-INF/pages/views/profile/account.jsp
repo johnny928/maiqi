@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-12" id="accountPanel">
 		<div class="portlet light">
 			<div class="portlet-title tabbable-line">
 				<div class="caption caption-md">
@@ -19,7 +19,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="portlet-body">
+			<div class="portlet-body" >
 				<div class="tab-content">
 					<!-- PERSONAL INFO TAB -->
 					<div class="tab-pane active" id="tab_1_1">
@@ -42,9 +42,9 @@
 							</div>
 							<div class="margiv-top-10">
 								<a href="#" class="btn green-haze" ng-click="accountSave(accountForm.$valid)" ng-class="{'active': isActive}">
-								Save Changes </a>
+								确定 </a>
 								<a href="#" class="btn default" ng-click="accountCancel()">
-								Cancel </a>
+								取消 </a>
 							</div>
 						</form>
 					</div>
@@ -52,7 +52,6 @@
 					<!-- CHANGE AVATAR TAB -->
 					<div class="tab-pane" id="tab_1_2">
 						<p>
-							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
 						</p>
 						<form action="#" role="form">
 							<div class="form-group">
@@ -65,25 +64,23 @@
 									<div>
 										<span class="btn default btn-file">
 										<span class="fileinput-new">
-										Select image </span>
+										选择头像图片 </span>
 										<span class="fileinput-exists">
-										Change </span>
-										<input type="file" name="...">
+										更换头像 </span>
+										<input type="file" name="..." id="user_icon">
 										</span>
 										<a href="#" class="btn default fileinput-exists" data-dismiss="fileinput">
-										Remove </a>
+										取消 </a>
 									</div>
 								</div>
 								<div class="clearfix margin-top-10">
-									<span class="label label-danger">NOTE! </span>
-									<span>Attached image thumbnail is supported in Latest Firefox, Chrome, Opera, Safari and Internet Explorer 10 only </span>
+									<span class="label label-danger">注意</span>
+									<span>上传的文件必须为图片，并且大小不能超过1M。</span>
 								</div>
 							</div>
 							<div class="margin-top-10">
-								<a href="#" class="btn green-haze">
-								Submit </a>
-								<a href="#" class="btn default">
-								Cancel </a>
+								<a href="#" class="btn green-haze" ng-click="uploadIcon()">
+								确定 </a>
 							</div>
 						</form>
 					</div>
@@ -92,22 +89,20 @@
 					<div class="tab-pane" id="tab_1_3">
 						<form action="#">
 							<div class="form-group">
-								<label class="control-label">Current Password</label>
-								<input type="password" class="form-control"/>
+								<label class="control-label">原登录密码</label>
+								<input type="password" class="form-control" id="orgPass"/>
 							</div>
 							<div class="form-group">
-								<label class="control-label">New Password</label>
-								<input type="password" class="form-control"/>
+								<label class="control-label">新登录密码</label>
+								<input type="password" class="form-control" id="newPass"/>
 							</div>
 							<div class="form-group">
-								<label class="control-label">Re-type New Password</label>
-								<input type="password" class="form-control"/>
+								<label class="control-label">重新输入新的登录密码</label>
+								<input type="password" class="form-control" id="rePass"/>
 							</div>
 							<div class="margin-top-10">
-								<a href="#" class="btn green-haze">
-								Change Password </a>
-								<a href="#" class="btn default">
-								Cancel </a>
+								<a href="#" class="btn green-haze" ng-click="changePassword()">
+								确定 </a>
 							</div>
 						</form>
 					</div>

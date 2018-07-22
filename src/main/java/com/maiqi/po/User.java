@@ -15,6 +15,7 @@ public class User {
 	private String updateUserId;
 	private String userDesc;
 	private BigDecimal proportion;
+	private String userImgVersion;
 	
 	public String getUserId() {
 		return userId;
@@ -81,5 +82,11 @@ public class User {
 	}
 	public void setProportion(BigDecimal proportion) {
 		this.proportion = proportion;
+	}
+	public String getUserImgVersion() {
+		return userImgVersion;
+	}
+	public void setUserImgVersion(String userImgVersion) {
+		this.userImgVersion = userImgVersion;
 	}
 }

@@ -85,11 +85,24 @@ MetronicApp.factory('settings', ['$rootScope', function($rootScope) {
 }]);
 
 /* Setup App Main Controller */
-MetronicApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
+MetronicApp.controller('AppController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
     $scope.$on('$viewContentLoaded', function() {
         Metronic.initComponents(); // init core components
         //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
     });
+    $rootScope.userData = {};
+    $http({
+		method : 'POST',
+		url : 'views/profile/getAuthor',
+		data: {}
+	}).then(function successCallback(response) {
+		var result = response.data;
+		if(result.isSuccess == 1){
+			$rootScope.userData = result.data.userData || {};
+		}
+	}, function errorCallback(response) {
+		// 请求失败执行代码
+	});
 }]);
 
 /***
@@ -200,7 +213,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/plugins/jquery-tags-input/jquery.tagsinput.css',
 	                        
 	                        'assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js',
-	                        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+//	                        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
 	                        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
 	                        'assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
 	                        'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
@@ -321,6 +334,37 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	            }]
 	        }
 	    })
+	    .state('memberLevels', {
+	        url: "/memberLevels",
+	        templateUrl: "views/memberLevel/memberLevels",
+	        data: {pageTitle: 'MemberLevels'},
+	//      controller: "GeneralPageController",
+	        resolve: {
+	            deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                return $ocLazyLoad.load({
+	                    name: 'MetronicApp',
+	                    insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                    files: [
+	                        'assets/global/plugins/select2/select2.css',                             
+	                        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+	                        'assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css',
+							'assets/global/css/maiqi/maiqi.css',
+	                        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+	                        'assets/global/plugins/select2/select2.min.js',
+	                        'assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
+	                        'assets/global/plugins/datatables/all.min.js',
+	                        'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
+	
+	                        'assets/global/scripts/datatable.js',
+	                        'assets/appjs/scripts/table-ajax.js',
+	                        'assets/admin/pages/scripts/proportion.js',
+	
+	                        'assets/appjs/controllers/MemberLevelController.js'
+	                    ]
+	                });
+	            }]
+	        }
+	    })
 	
 		.state('clients', {
 	        url: "/clients",
@@ -414,7 +458,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							
 							'assets/global/plugins/morris/raphael-min.js',
 							'assets/global/plugins/jquery.sparkline.min.js',
-							
+							'assets/global/plugins/mathjs/math.min.js',
 							'assets/admin/pages/scripts/tasks.js',
 	                        'assets/appjs/controllers/DashboardController.js'
 	                    ]

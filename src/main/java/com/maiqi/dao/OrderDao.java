@@ -1,5 +1,6 @@
 package com.maiqi.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -27,4 +28,18 @@ public interface OrderDao {
 	public List<Map<String,Object>> getSalesStatByDay(Map<String,Object> params);
 	
 	public List<String> getSalesStatDayCon(Map<String,Object> params);
+	
+	public List<Map<String,Object>> getSalesStatByMonth(Map<String,Object> params);
+	
+	public List<String> getSalesStatMonthCon(Map<String,Object> params);
+	
+	public List<Map<String,Object>> getSalesStatByYear(Map<String,Object> params);
+	
+	public List<String> getSalesStatYearCon(Map<String,Object> params);
+	
+	public List<Map<String,Object>> getProStatByDay(Map<String,Object> params);
+	public List<Map<String,Object>> getProStatByMonth(Map<String,Object> params);
+	public List<Map<String,Object>> getProStatByYear(Map<String,Object> params);
+	
+	public BigDecimal getDiscount(String orderId);
 }
