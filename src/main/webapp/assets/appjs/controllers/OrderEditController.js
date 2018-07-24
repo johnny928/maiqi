@@ -266,7 +266,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		};
 		
 		let initClientSource = function(){
-			let initS = $scope.orderInfo.order.clientSource || $scope.orderInfo.client.clientSource;
+			let initS = $scope.orderInfo.order.clientSource || '';
 			if( initS ){
     			let sel = $scope.operators.filter(function(node,index){
     				return node.userId == initS;
@@ -275,6 +275,12 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
     				$scope.clientSource.selected = sel[0];
     			}
     		}
+			$scope.clearClientSource = function($event,$select){
+				$event.preventDefault();
+				$event.stopPropagation(); 
+				$scope.clientSource.selected = undefined;
+				$scope.clientSource.search = undefined;
+			}
 		};
 		
 		let loadTab1 = function(){
@@ -402,11 +408,12 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 				$scope.orderInfo.client.birthday = $filter('date')($scope.orderInfo.client.birthday,'yyyy-MM-dd');
 			}
 			$scope.orderInfo.client.label = $('.client_label').val();
-			$scope.orderInfo.client.clientSource = ($scope.clientSource.selected && $scope.clientSource.selected.userId) || '';
+			$scope.orderInfo.client.clientSource = (!$scope.orderInfo.client.clientId && $scope.clientSource.selected && $scope.clientSource.selected.userId) || $scope.orderInfo.client.clientSource ;
 		};
 		
 		let getOrderData = function(){
 			$scope.orderInfo.order.salespersonId = $scope.salesperson.selected && $scope.salesperson.selected.userId;
+			$scope.orderInfo.order.clientSource = ($scope.clientSource.selected && $scope.clientSource.selected.userId) || '';
 		};
 		
 		$scope.addGoods = function(_tab,_row){
@@ -584,6 +591,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 			        		}
 			        		initSelect2( ($scope.orderInfo && $scope.orderInfo.client) || null);
 			        		initTags($scope.orderInfo);
+			        		initClientSource();
 			        	}
 			        	toastr.success(msg);
 			        })

@@ -117,7 +117,7 @@
 									</span>
 									<select id="client-level" class="form-control select2me" data-placeholder="Select..." 
 									ng-model="client.level">
-										<option value=""></option>
+										<option value="">无</option>
 										<option value="1">Level.1</option>
 										<option value="2">Level.2</option>
 										<option value="3">Level.3</option>
@@ -155,7 +155,9 @@
 							              <small ng-bind-html="'登录名：'+person.loginName | highlight: $select.search"></small>
 							            </ui-select-choices>
 							        </ui-select>
-									
+									<span class="input-group-btn">
+							            <button class="btn btn-default" ng-click="clearClientSource($event, $select)">X</button>
+							        </span>
 								</div>
 							</div>
 						</div>

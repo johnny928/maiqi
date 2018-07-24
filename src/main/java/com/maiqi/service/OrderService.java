@@ -117,7 +117,7 @@ public class OrderService {
 		}
 		clientService.saveClient(client);
 		order.setClientId(client.getClientId());
-		order.setClientSource(client.getClientSource());
+//		order.setClientSource(client.getClientSource());
 		saveOrder(order);
 	}
 	
@@ -219,6 +219,14 @@ public class OrderService {
 	}
 	
 	public BigDecimal getDiscount(String orderId){
-		return orderDao.getDiscount(orderId);
+		BigDecimal d = orderDao.getDiscount(orderId);
+		return Utils.isEmpty(d) ? new BigDecimal(10) : d;
+	}
+	
+	public int delOrder(String orderId){
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("orderId", orderId);
+		params.put("updateUserId", sessionManager.getAuthor().getUserId());
+		return orderDao.delOrder(params);
 	}
 }

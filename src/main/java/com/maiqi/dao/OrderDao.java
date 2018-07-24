@@ -42,4 +42,5 @@ public interface OrderDao {
 	public List<Map<String,Object>> getProStatByYear(Map<String,Object> params);
 	
 	public BigDecimal getDiscount(String orderId);
+	public int delOrder(Map<String,Object> params);
 }

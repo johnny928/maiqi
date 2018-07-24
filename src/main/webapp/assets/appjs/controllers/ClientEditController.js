@@ -131,6 +131,13 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 				$scope.clientSource.selected = sel[0];
 			}
 		}
+		$scope.clearClientSource = function($event,$select){
+			console.log('here');
+			$event.preventDefault();
+			$event.stopPropagation(); 
+			$scope.clientSource.selected = undefined;
+			$scope.clientSource.search = undefined;
+		}
 	};
 	
 	initSelect2();

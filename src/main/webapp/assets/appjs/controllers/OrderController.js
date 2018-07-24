@@ -41,8 +41,48 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
     	});
     };
     
-    $scope.orderEdit = function(_orderId){
+    let handleConfirm = function(){
+		$('.del-order').confirmation({
+			title: '确认删除此订单？',
+			btnOkLabel: '确认',
+			btnCancelLabel: '取消',
+			onConfirm: function(event,el){
+				event.preventDefault();
+				let orderId = el.attr('data-orderId');
+				$scope.delOrder(orderId);
+			}
+		})
+    };
+    
+    $scope.orderEdit = function(event,_orderId){
+    	event.preventDefault();
     	$state.go('orderEditer',{orderId: _orderId})
+    };
+    
+    $scope.delOrder = function(_orderId){
+    	maiqi.post({url:'views/orders/delOrder',
+			data:{orderId:_orderId},
+			errMsg:'删除商品失败！',container:'#orderPanel'})
+			.then(function(response){
+	        	let res = response.data;
+	        	if(res.isSuccess){
+	        		if($scope.orderList){
+	        			$scope.orderList.getDataTable().ajax.reload();
+	        		}
+	        		Metronic.unblockUI("#orderPanel");
+		        	Metronic.alert({
+	                    type: 'success',
+	                    icon: 'check',
+	                    message: '删除成功！',
+	                    container: '#orderPanel',
+	                    closeInSeconds: 3, 
+	                    place: 'prepend'
+	                });
+	        	}	        
+			})
+			.finally(function(){
+				Metronic.unblockUI("#orderPanel");
+			})
     };
     
     $scope.newOrder = function(){
@@ -121,7 +161,11 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
 	               {
 	            	   'targets': [6],
 	                	"createdCell": function(td, cellData, rowData, row, col){
-	                		var html = '<button class="btn btn-primary" ng-click="orderEdit(\''+rowData.orderId+'\')" >修改</button>';
+	                		let eles = ['<div><button class="btn btn-xs btn-success" ng-click="orderEdit($event,\''+rowData.orderId+'\')" >修改</button>',
+	         		            '<p></p>',
+	         		            '<button class="btn btn-xs green-stripe del-order" data-toggle="confirmation" data-placement="top" data-orderId="'+rowData.orderId+'">删除</button>',
+	     		            '</div>'];
+	                		let html = eles.join('\n');
 	                		$(td).append($compile(html)($scope));
 	                	}
 	               }
@@ -130,6 +174,7 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
             onError: function (grid) {
             }
 		});
+		$scope.orderList = oTable;
 		
 		$("#orders_table").on('preXhr.dt xhr.dt',function(e, settings, data){
 			$log.log('on xhr');
@@ -140,6 +185,7 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
             });
 		}).on('init.dt draw.dt',function (e, settings, data){
 			$log.log('on draw');
+			handleConfirm();
 			Metronic.unblockUI("#orders_table");
 		});
 		

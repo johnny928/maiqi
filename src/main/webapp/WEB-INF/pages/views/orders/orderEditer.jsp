@@ -128,7 +128,7 @@
 													</span>
 													<select id="client-level" class="form-control select2me" data-placeholder="Select..." 
 													ng-model="orderInfo.client.level">
-														<option value=""></option>
+														<option value="">无</option>
 														<option value="1">Level.1</option>
 														<option value="2">Level.2</option>
 														<option value="3">Level.3</option>
@@ -160,13 +160,15 @@
 													<i class="fa fa-group"></i>
 													</span>
 													<ui-select ng-model="clientSource.selected" theme="bootstrap">
-											            <ui-select-match placeholder="请选择该客户的来源..." >{{$select.selected.userName}}</ui-select-match>
+											            <ui-select-match allow-clear="true" placeholder="请选择该客户的来源..." >{{$select.selected.userName}}</ui-select-match>
 											            <ui-select-choices repeat="person in operators | filter: $select.search">
 											              <div ng-bind-html="person.userName | highlight: $select.search"></div>
 											              <small ng-bind-html="'登录名：'+person.loginName | highlight: $select.search"></small>
 											            </ui-select-choices>
 											        </ui-select>
-													
+													<span class="input-group-btn">
+											            <button class="btn btn-default" ng-click="clearClientSource($event, $select)">X</button>
+											        </span>
 												</div>
 											</div>
 										</div>

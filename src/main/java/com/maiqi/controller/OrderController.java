@@ -289,13 +289,8 @@ public class OrderController {
 			Integer quantity = Utils.isEmpty(params.get("quantity")) ? 0: new Integer((String)params.get("quantity"));
 			BigDecimal discount = Utils.isEmpty(params.get("discount")) ? orderService.getDiscount(orderId): new BigDecimal((String)params.get("discount"));
 			resM.put("orderDetail", orderService.saveOrderDetail(orderId, goods, quantity, discount));
-			if(Utils.isEmpty(resM.get("orderDetail"))){
-				jresult.setMessage("缺少參數。");
-				jresult.setIsSuccess(0);
-			}else{
-				jresult.setData(resM);
-				jresult.setIsSuccess(1);
-			}
+			jresult.setData(resM);
+			jresult.setIsSuccess(1);
 		}catch(Exception e){
 			jresult.setIsSuccess(0);
 			jresult.setMessage("保存数据出现异常！");
@@ -330,6 +325,28 @@ public class OrderController {
 			resM.put("order", orderService.newOrder());
 			jresult.setData(resM);
 			jresult.setIsSuccess(1);
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("保存数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
+	
+	@RequestMapping(value={"/delOrder"})
+	@ResponseBody
+	public JsonResult delOrder(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			String orderId = (String) params.get("orderId");
+			if(Utils.isEmpty(orderId)){
+				jresult.setMessage("缺少參數。");
+				jresult.setIsSuccess(0);
+			}else{
+				orderService.delOrder(orderId);
+				jresult.setIsSuccess(1);
+			}
 		}catch(Exception e){
 			jresult.setIsSuccess(0);
 			jresult.setMessage("保存数据出现异常！");

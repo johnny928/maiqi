@@ -174,9 +174,7 @@
 	        	<if test="label !=null and label !=''">
 	        		label=#{label},
 	        	</if>
-	        	<if test="clientSource !=null and clientSource !=''">
-	        		clientSource=#{clientSource},
-	        	</if>
+	        	clientSource=#{clientSource},
 	        	isValid=#{isValid},
 				updateTime=CURRENT_TIMESTAMP(),
 				updateUserId=#{updateUserId} ,

@@ -175,6 +175,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        'assets/global/plugins/select2/select2.min.js',
 	                        'assets/global/plugins/datatables/all.min.js',
 	
+	                        'assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js',
 	                        'assets/global/scripts/maiqi/maiqi.js',
 	                        'assets/global/scripts/datatable.js',
 	                        'assets/appjs/scripts/table-ajax.js',

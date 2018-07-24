@@ -99,11 +99,11 @@
 	</select>
 	
 	<select id="getTodaySales" parameterType="Map" resultType="java.util.Map">
-		select SUM(ifnull(d.quantity,0)) quantity,SUM(ifnull(d.totalPrice,0)) sale,
-			SUM( CASE when o.salespersonId=#{userId} then ifnull(d.quantity,0) else 0 END) myQuantity,
+		select count(DISTINCT o.orderNumber) quantity,SUM(ifnull(d.totalPrice,0)) sale,
+			count(DISTINCT CASE when o.salespersonId=#{userId} then o.orderNumber else null END) myQuantity,
 			SUM( CASE when o.salespersonId=#{userId} then ifnull(d.totalPrice,0) else 0 END) mySale 
 		from t_order o,t_orderdetails d 
-		where o.orderId = d.orderId 
+		where o.orderId = d.orderId and o.isValid = 1 and d.isValid = 1
 			and o.orderTime &gt;= str_to_date( date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s')
 			and o.orderTime &lt; DATE_ADD( str_to_date(date_format(NOW(), '%Y-%m-%d'),'%Y-%m-%d %H:%i:%s'),interval 1 day )
 	</select>
@@ -347,9 +347,17 @@
 	        	<if test="isValid !=null and isValid !=''">
 	        		isValid=#{isValid},
 	        	</if>
-	        	<if test="clientSource !=null and clientSource !=''">
-	        		clientSource=#{clientSource},
-	        	</if>
+	        	clientSource=#{clientSource},
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+		where orderId=#{orderId}  
+    </update> 
+    
+    <update id="delOrder" parameterType="Map" >  
+        update t_Order  
+        	<set>
+        		isValid=0,
 				updateTime=CURRENT_TIMESTAMP(),
 				updateUserId=#{updateUserId} ,
 			</set>

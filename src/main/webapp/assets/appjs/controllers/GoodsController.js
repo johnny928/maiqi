@@ -53,6 +53,7 @@ MetronicApp.controller('GoodsController', ['$rootScope', '$scope', 'settings','$
 			btnOkLabel: '确认',
 			btnCancelLabel: '取消',
 			onConfirm: function(event,el){
+				event.preventDefault();
 				let goodsId = el.attr('data-goodsid');
 				$scope.delGoods(goodsId);
 			}
@@ -116,7 +117,7 @@ MetronicApp.controller('GoodsController', ['$rootScope', '$scope', 'settings','$
 	               {
 	            	   'targets': [5],
 	                	"createdCell": function(td, cellData, rowData, row, col){
-	                		let eles = ['<div><button class="btn btn-xs btn-success" ng-click="goodsEdit(\''+rowData.goodsId+'\')" >修改</button>',
+	                		let eles = ['<div><button class="btn btn-xs btn-success" ng-click="goodsEdit($event,\''+rowData.goodsId+'\')" >修改</button>',
 				         		            '<p></p>',
 				         		            '<button class="btn btn-xs green-stripe del-goods" data-toggle="confirmation" data-placement="top" data-goodsId="'+rowData.goodsId+'">删除</button>',
 				     		            '</div>'];
@@ -147,7 +148,8 @@ MetronicApp.controller('GoodsController', ['$rootScope', '$scope', 'settings','$
 		});
 	};
 	
-	$scope.goodsEdit = function(_goodsId){
+	$scope.goodsEdit = function(event,_goodsId){
+		event.preventDefault();
 		$state.go('goodsEditer',{goodsId: _goodsId})
 	}
 	

@@ -54,6 +54,7 @@ MetronicApp.controller('ClientsController', ['$rootScope', '$scope', 'settings',
 			btnOkLabel: '确认',
 			btnCancelLabel: '取消',
 			onConfirm: function(event,el){
+				event.preventDefault();
 				let clientId = el.attr('data-clientId');
 				$scope.delClient(clientId);
 			}
