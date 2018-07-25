@@ -181,4 +181,14 @@
 			</set>
 		where clientId=#{clientId}  
     </update> 
+    
+    <update id="delClient" parameterType="Map" >  
+        update t_client  
+        	<set>
+        		isValid=0,
+				updateTime=CURRENT_TIMESTAMP(),
+				updateUserId=#{updateUserId} ,
+			</set>
+		where clientId=#{clientId}   
+    </update> 
 </mapper> 

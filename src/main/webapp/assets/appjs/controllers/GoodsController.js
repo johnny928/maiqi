@@ -164,14 +164,7 @@ MetronicApp.controller('GoodsController', ['$rootScope', '$scope', 'settings','$
 	        			$scope.goodsList.getDataTable().ajax.reload();
 	        		}
 	        		Metronic.unblockUI("#goodsPanel");
-		        	Metronic.alert({
-	                    type: 'success',
-	                    icon: 'check',
-	                    message: '删除成功！',
-	                    container: '#goodsPanel',
-	                    closeInSeconds: 3, 
-	                    place: 'prepend'
-	                });
+	        		maiqi.toastr.success('删除成功！');
 	        	}	        
 			})
 			.finally(function(){

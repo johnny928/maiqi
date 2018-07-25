@@ -172,14 +172,7 @@ MetronicApp.controller('ClientsController', ['$rootScope', '$scope', 'settings',
 	        			$scope.clientsList.getDataTable().ajax.reload();
 	        		}
 	        		Metronic.unblockUI("#clientsPanel");
-		        	Metronic.alert({
-	                    type: 'success',
-	                    icon: 'check',
-	                    message: '删除成功！',
-	                    container: '#clientsPanel',
-	                    closeInSeconds: 3, 
-	                    place: 'prepend'
-	                });
+	        		maiqi.toastr.success('删除成功！');
 	        	}	        
 			})
 			.finally(function(){

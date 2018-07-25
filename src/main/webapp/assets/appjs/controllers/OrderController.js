@@ -70,14 +70,7 @@ MetronicApp.controller('OrderModalCtrl', ['$rootScope', '$scope', '$uibModal', '
 	        			$scope.orderList.getDataTable().ajax.reload();
 	        		}
 	        		Metronic.unblockUI("#orderPanel");
-		        	Metronic.alert({
-	                    type: 'success',
-	                    icon: 'check',
-	                    message: '删除成功！',
-	                    container: '#orderPanel',
-	                    closeInSeconds: 3, 
-	                    place: 'prepend'
-	                });
+	        		maiqi.toastr.success('删除成功！');
 	        	}	        
 			})
 			.finally(function(){

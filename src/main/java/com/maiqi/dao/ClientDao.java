@@ -19,4 +19,5 @@ public interface ClientDao {
 	public int selectClientsCnt(Map<String,Object> params);
 	
 	public List<Map<String,Object>> selectClients4V(Map<String,Object> params);
+	public int delClient(Map<String,Object> params);
 }

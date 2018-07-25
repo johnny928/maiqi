@@ -106,14 +106,7 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 			.then(function(response) {
 				let res = response.data;
 				Object.assign($scope.client,res.data.client);
-	        	Metronic.alert({
-                    type: 'success',
-                    icon: 'check',
-                    message: '保存成功！',
-                    container: '#clientEditPanel',
-                    closeInSeconds: 3, 
-                    place: 'prepend'
-                });
+				maiqi.toastr.success('保存成功！');
 	        })
 	        .finally(function(){
 	        	Metronic.unblockUI("#clientEditPanel");

@@ -1,5 +1,6 @@
 package com.maiqi.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,13 @@ public class ClientService {
 	
 	public Client getClientById(String clientId){
 		return clientDao.selectClientById(clientId);
+	}
+	
+	public int delClient(String clientId){
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("clientId", clientId);
+		params.put("updateUserId", sessionManager.getAuthor().getUserId());
+		return clientDao.delClient(params);
 	}
 	
 }

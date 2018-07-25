@@ -61,6 +61,23 @@ MetronicApp.service('maiqi', ['$http','$q','$timeout',
 				}
 				return deferred.promise;
 			}
-		}
+		};
+		
+		toastr.options = {
+		  "closeButton": true,
+		  "debug": false,
+		  "positionClass": "toast-top-right",
+		  "onclick": null,
+		  "showDuration": "500",
+		  "hideDuration": "3000",
+		  "timeOut": "3000",
+		  "extendedTimeOut": "3000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut"
+		};
+		
+		this.toastr = toastr;
 	}
 ]);

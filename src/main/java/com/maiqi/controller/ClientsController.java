@@ -125,4 +125,26 @@ public class ClientsController {
 		}		
 		return jresult;
 	}
+	
+	@RequestMapping(value={"/delClient"})
+	@ResponseBody
+	public JsonResult delClient(@RequestBody Map<String,Object> params){
+		JsonResult jresult = new JsonResult();
+		Map resM = new HashMap();
+		try{
+			String clientId = (String) params.get("clientId");
+			if(Utils.isEmpty(clientId)){
+				jresult.setMessage("缺少參數。");
+				jresult.setIsSuccess(0);
+			}else{
+				clientService.delClient(clientId);
+				jresult.setIsSuccess(1);
+			}
+		}catch(Exception e){
+			jresult.setIsSuccess(0);
+			jresult.setMessage("保存数据出现异常！");
+			e.printStackTrace();
+		}		
+		return jresult;
+	}
 }

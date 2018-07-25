@@ -52,14 +52,7 @@ MetronicApp.controller('GoodsEditController', ['$rootScope', '$scope', 'settings
 		        	let res = response.data;
 		        	$log.log(res);
 		        	if(res.isSuccess){
-		        		Metronic.alert({
-		                    type: 'success',
-		                    icon: 'check',
-		                    message: '保存成功！',
-		                    container: '#goodsPanel',
-		                    closeInSeconds: 3, 
-		                    place: 'prepend'
-		                });
+		        		maiqi.toastr.success('保存成功！');
 		        	}
 		        })
 		        .finally(function(){

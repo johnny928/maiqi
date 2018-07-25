@@ -204,14 +204,6 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 	        		console.log(res.data.memberLevel);
 	        		toggleEdit(row,'hide');
 	        		toastr.success('保存成功！');
-//	        		Metronic.alert({
-//	                    type: 'success',
-//	                    icon: 'check',
-//	                    message: '保存成功！',
-//	                    container: '#memberLevelPanel',
-//	                    closeInSeconds: 3, 
-//	                    place: 'prepend'
-//	                });
 	        	}
 	        })
 	        .finally(function(){

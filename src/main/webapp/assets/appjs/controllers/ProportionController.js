@@ -94,14 +94,7 @@ function($rootScope, $scope, settings, $modal, $log, $state, $stateParams, $http
 			.then(function(response) {
 	        	let res = response.data;
 	        	if(res.isSuccess){
-	        		Metronic.alert({
-	                    type: 'success',
-	                    icon: 'check',
-	                    message: '保存成功！',
-	                    container: '#proportionPanel',
-	                    closeInSeconds: 3, 
-	                    place: 'prepend'
-	                });
+	        		maiqi.toastr.success('保存成功！');
 	        	}
 	        })
 	        .finally(function(){

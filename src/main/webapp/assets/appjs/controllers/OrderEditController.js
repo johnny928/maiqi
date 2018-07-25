@@ -510,14 +510,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 		        		if($scope[_tab] && $scope[_tab].goodsList){
 		        			$scope[_tab].goodsList.getDataTable().ajax.reload();
 		        		}
-		        		Metronic.alert({
-		                    type: 'success',
-		                    icon: 'check',
-		                    message: '保存成功！',
-		                    container: '#orderEditPanel',
-		                    closeInSeconds: 3, 
-		                    place: 'prepend'
-		                });
+		        		maiqi.toastr.success('保存成功！');
 		        	}		        	
 		        })
 		        .finally(function(){
@@ -541,14 +534,7 @@ MetronicApp.controller('OrderEditCtrl', ['$rootScope', '$scope', 'settings','$mo
 					let res = response.data;
 					Object.assign($scope.orderInfo.client,res.data.client);
 					Object.assign($scope.orderInfo.order,res.data.order);
-		        	Metronic.alert({
-	                    type: 'success',
-	                    icon: 'check',
-	                    message: '保存成功！',
-	                    container: '#orderEditPanel',
-	                    closeInSeconds: 3, 
-	                    place: 'prepend'
-	                });
+					maiqi.toastr.success('保存成功！');
 		        })
 		        .finally(function(){
 		        	Metronic.unblockUI("#orderEditPanel");
